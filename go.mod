@@ -1,3 +1,3 @@
-module github.com/jsaussereau/toha-teaching/v4
+module github.com/jsaussereau/toha-enseirb-matmeca
 
 go 1.21
