@@ -74,6 +74,14 @@ html[data-theme='dark'] {
   display: none;
 }
 
+.shortcode-light-image {
+  display: block;
+}
+
+.shortcode-dark-image {
+  display: none;
+}
+
 html[data-theme='dark'] {
   .light-logo {
     display: none;
@@ -81,5 +89,13 @@ html[data-theme='dark'] {
 
   .dark-logo {
     display: inline;
+  }
+
+  .shortcode-light-image {
+    display: none;
+  }
+
+  .shortcode-dark-image {
+    display: block;
   }
 }

@@ -15,6 +15,13 @@
 {{- if $rounded -}}
   {{- $classes = $classes | append "rounded" -}}
 {{- end -}}
+{{- $srcDark := .Get "src_dark" -}}
+{{- $lightClasses := $classes -}}
+{{- $darkClasses := $classes -}}
+{{- if $srcDark -}}
+  {{- $lightClasses = $lightClasses | append "shortcode-light-image" -}}
+  {{- $darkClasses = $darkClasses | append "shortcode-dark-image" -}}
+{{- end -}}
 
 <img src="{{ .Get "src"}}"
     {{ if .Get "title" }}
@@ -29,7 +36,27 @@
     {{ if .Get "float" }}
         style="float: {{.Get "float"}};"
     {{end}}
-    {{ if gt (len $classes) 0 }}
-        class="{{ delimit $classes " " }}"
+    {{ if gt (len $lightClasses) 0 }}
+        class="{{ delimit $lightClasses " " }}"
     {{end}}
 >
+
+{{- if $srcDark -}}
+<img src="{{ $srcDark }}"
+  {{ if .Get "title" }}
+    alt="{{.Get "title"}}"
+  {{end}}
+  {{ if .Get "width" }}
+    width="{{.Get "width"}}"
+  {{end}}
+  {{ if .Get "height" }}
+    height="{{.Get "height"}}"
+  {{end}}
+    {{ if .Get "float" }}
+        style="float: {{.Get "float"}};"
+    {{end}}
+  {{ if gt (len $darkClasses) 0 }}
+    class="{{ delimit $darkClasses " " }}"
+  {{end}}
+>
+{{- end -}}
