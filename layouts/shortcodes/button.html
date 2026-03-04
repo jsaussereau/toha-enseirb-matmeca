@@ -1,0 +1,42 @@
+{{- $href := .Get "href" -}}
+{{- if not $href -}}
+  {{- errorf "The %q shortcode requires a 'href' argument: %s" .Name .Position -}}
+{{- end -}}
+
+{{- $icon := .Get "icon" -}}
+{{- $iconPosition := lower (default "left" (.Get "icon-position")) -}}
+{{- if and $icon (ne $iconPosition "left") (ne $iconPosition "right") -}}
+  {{- $iconPosition = "left" -}}
+{{- end -}}
+
+{{- $extraClass := .Get "class" -}}
+{{- $buttonClass := "btn btn-info shortcode-button" -}}
+{{- if $extraClass -}}
+  {{- $buttonClass = printf "%s %s" $buttonClass $extraClass -}}
+{{- end -}}
+
+{{- $newTab := false -}}
+{{- with .Get "new-tab" -}}
+  {{- $newTab = in (slice "1" "true" "yes" "on") (lower .) -}}
+{{- end -}}
+
+{{- with .Get "target" -}}
+  {{- $targetOption := lower . -}}
+  {{- if or (eq $targetOption "_blank") (eq $targetOption "blank") (eq $targetOption "new") -}}
+    {{- $newTab = true -}}
+  {{- else if or (eq $targetOption "_self") (eq $targetOption "self") (eq $targetOption "same") -}}
+    {{- $newTab = false -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $label := .Inner | $.Page.RenderString (dict "display" "inline") -}}
+
+<a href="{{ $href }}" class="{{ $buttonClass }}" target="{{ if $newTab }}_blank{{ else }}_self{{ end }}"{{ if $newTab }} rel="noopener noreferrer"{{ end }}>
+  {{- if and $icon (eq $iconPosition "left") -}}
+    <span class="shortcode-button-icon" style="margin-right: 7px;" aria-hidden="true"><i class="{{ $icon }}"></i></span>
+  {{- end -}}
+  <span class="shortcode-button-label">{{ $label }}</span>
+  {{- if and $icon (eq $iconPosition "right") -}}
+    <span class="shortcode-button-icon" style="margin-left: 7px;" aria-hidden="true"><i class="{{ $icon }}"></i></span>
+  {{- end -}}
+</a>

@@ -114,6 +114,23 @@
   }
 }
 
+.shortcode-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+  text-decoration: none !important;
+
+  .shortcode-button-icon {
+    line-height: 1;
+  }
+
+  .shortcode-button-label {
+    line-height: 1.2;
+  }
+}
+
 .copy-code-button {
   float: right;
   margin-top: 0.5em;
