@@ -18,6 +18,11 @@ img {
   &.rounded {
     border-radius: 10px !important;
   }
+
+  &.vertical-margin {
+    margin-top: 0.6em;
+    margin-bottom: 0.6em;
+  }
 }
 
 figure {

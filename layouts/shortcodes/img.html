@@ -2,6 +2,9 @@
 {{- with .Get "align" -}}
   {{- $classes = $classes | append . -}}
 {{- end -}}
+{{- with .Get "verticalMargin" -}}
+  {{- $classes = $classes | append "vertical-margin" -}}
+{{- end -}}
 {{- $rounded := false -}}
 {{- with .Get "rounded" -}}
   {{- $roundedValue := lower (trim (printf "%v" .) " ") -}}
