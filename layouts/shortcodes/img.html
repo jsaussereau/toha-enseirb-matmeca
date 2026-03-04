@@ -1,17 +1,32 @@
+{{- $classes := slice -}}
+{{- with .Get "align" -}}
+  {{- $classes = $classes | append . -}}
+{{- end -}}
+{{- $rounded := false -}}
+{{- with .Get "rounded" -}}
+  {{- $roundedValue := lower (trim (printf "%v" .) " ") -}}
+  {{- if or (eq $roundedValue "1") (eq $roundedValue "true") (eq $roundedValue "yes") (eq $roundedValue "on") -}}
+    {{- $rounded = true -}}
+  {{- end -}}
+{{- end -}}
+{{- if $rounded -}}
+  {{- $classes = $classes | append "rounded" -}}
+{{- end -}}
+
 <img src="{{ .Get "src"}}"
-    {{ if .Get "title"}}
+    {{ if .Get "title" }}
         alt="{{.Get "title"}}"
     {{end}}
-    {{ if .Get "width"}}
+    {{ if .Get "width" }}
         width="{{.Get "width"}}"
     {{end}}
-    {{ if .Get "height"}}
+    {{ if .Get "height" }}
         height="{{.Get "height"}}"
     {{end}}
-    {{ if .Get "float"}}
+    {{ if .Get "float" }}
         style="float: {{.Get "float"}};"
     {{end}}
-    {{ if .Get "align"}}
-        class="{{.Get "align"}}"
+    {{ if gt (len $classes) 0 }}
+        class="{{ delimit $classes " " }}"
     {{end}}
 >
