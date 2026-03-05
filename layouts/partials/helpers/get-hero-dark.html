@@ -1,4 +1,5 @@
 {{ $scratch := newScratch }}
+{{ $heroPermalink := partial "helpers/get-hero.html" . }}
 
 {{/* if hero_dark is specified in front-matter, try page bundle first, then assets */}}
 {{ if .Params.hero_dark }}
@@ -12,11 +13,18 @@
 {{ end }}
 
 {{ $heroDarkImage := $scratch.Get "heroDarkImage" }}
-{{ $heroPermalink := partial "helpers/get-hero.html" . }}
 {{/* keep original dark hero resolution when available */}}
 {{ if $heroDarkImage }}
   {{ $heroPermalink = $heroDarkImage.RelPermalink }}
+{{ else }}
+  {{/* when there is no custom hero, use dark default hero */}}
+  {{ if not .Params.hero }}
+    {{ $defaultHeroDarkImage := resources.Get "images/default-hero_dark.jpg" }}
+    {{ if $defaultHeroDarkImage }}
+      {{ $heroPermalink = $defaultHeroDarkImage.RelPermalink }}
+    {{ end }}
+  {{ end }}
 {{ end }}
 
-{{/* fallback to regular hero if hero_dark is not provided or not found */}}
+{{/* fallback to regular hero (custom hero if provided, else default light hero) */}}
 {{ return $heroPermalink }}
