@@ -1,5 +1,7 @@
 <div class="post-card">
   {{ $showDate := site.Params.features.blog.showDate | default true }}
+  {{ $tagsEnabled := site.Params.features.blog.tags.enable | default true }}
+  {{ $tagsOnCard := site.Params.features.blog.tags.on_card | default true }}
   <div class="card">
     <div class="card-head">
       {{ $postLink := partial "helpers/get-post-link.html" . }}
@@ -17,7 +19,7 @@
         <h5 class="card-title" style="display: inline;">{{ .Title }}</h5>
         <p class="card-text post-summary">{{ .Summary | plainify }}</p>
       </a>
-      {{ if and site.Params.features.tags.enable site.Params.features.tags.on_card }}
+      {{ if and $tagsEnabled $tagsOnCard }}
         {{ partial "misc/tags.html" .Params.tags }}
       {{ end }}
     </div>

@@ -1,7 +1,8 @@
 {{/*  variables for enabling/disabling various features  */}}
 {{ $darkEnabled  := true }}
 {{ $lightEnabled := true }}
-{{ if site.Params.features.theme.enable }}
+{{ $themeEnabled := site.Params.features.theme.enable | default true }}
+{{ if $themeEnabled }}
   {{ $darkEnabled   = site.Params.features.theme.services.dark   | default true }}
   {{ $lightEnabled  = site.Params.features.theme.services.light  | default true }}
 {{ end }}

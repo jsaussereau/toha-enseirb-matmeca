@@ -8,7 +8,7 @@
   {{ $parent = .Params.menu.sidebar.parent }}
 {{ end }}
 
-{{ $nextPrevNavigatorBySection := site.Params.features.blog.nextPrevNavigatorBySection | default false }}
+{{ $nextPrevNavigatorBySection := site.Params.features.blog.nextPrevNavigatorBySection | default true }}
 
 
 <!-- List all the pages. It uses the sidebar menu to discover the page order. -->

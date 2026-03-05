@@ -3,10 +3,10 @@
 {{ $navigationEnabled      := site.Params.footer.navigation.enable      | default true }}
 {{ $customMenusEnabled     := site.Params.footer.navigation.customMenus | default true }}
 {{ $contactMeEnabled       := site.Params.footer.contactMe.enable       | default true }}
-{{ $newsletterEnabled      := site.Params.footer.newsletter.enable      | default true }}
+{{ $newsletterEnabled      := site.Params.footer.newsletter.enable      | default false }}
 {{ $credentialsEnabled     := site.Params.footer.credentials.enable     | default true }}
 {{ $disclaimerEnabled      := site.Params.footer.disclaimer.enable      | default false }}
-{{ $hugoAttributionEnabled := site.Params.footer.hugoAttribution        | default true }}
+{{ $hugoAttributionEnabled := site.Params.footer.hugoAttribution        | default false }}
 
 {{/*  Keep backward compatibility for the newsletter function */}}
 {{ if site.Params.newsletter }}

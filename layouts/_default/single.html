@@ -8,8 +8,8 @@
 
 {{ define "sidebar" }}
   {{ $isPost := and .IsPage (eq .Section "posts") }}
-  {{ $allSectionsButton  := site.Params.features.blog.allSectionsButton | default (i18n "all_sections") }}
-  {{ $navbarCurrentSectionOnly := site.Params.features.blog.navbarCurrentSectionOnly | default false }}
+  {{ $allSectionsButton  := site.Params.features.blog.allSectionsButton | default (i18n "all_courses") }}
+  {{ $navbarCurrentSectionOnly := site.Params.features.blog.navbarCurrentSectionOnly | default true }}
   <section class="sidebar-section" id="sidebar-section">
     <div class="sidebar-holder{{ if $isPost }} in-post{{ end }}">
       <div class="sidebar{{ if $isPost }} in-post{{ end }}" id="sidebar">
@@ -56,9 +56,10 @@
 {{ end }}
 
 {{ define "content" }}
+{{ $tagsEnabled := site.Params.features.blog.tags.enable | default true }}
 <section class="content-section" id="content-section">
   <div class="content">
-    {{ $showDate := site.Params.features.blog.showDate | default true }}
+    {{ $showDate := site.Params.features.blog.showDate | default false }}
     <div class="container p-0 read-area">
       <!--Hero Area-->
       <div class="hero-area col-sm-12" id="hero-area" style='--hero-light: url({{ partial "helpers/get-hero.html" . }}); --hero-dark: url({{ partial "helpers/get-hero-dark.html" . }});'>
@@ -66,7 +67,7 @@
 
       <!--Content Start-->
       <div class="page-content">
-        {{ if site.Params.features.blog.showAuthor | default true }}
+        {{ if site.Params.features.blog.showAuthor | default false }}
         <div class="author-profile ms-auto align-self-lg-center">
           <img class="rounded-circle" src='{{ partial "helpers/get-author-image.html" . }}' alt="Author Image">
           <h5 class="author-name">{{ partial "helpers/get-author-name.html" . }}</h5>
@@ -94,7 +95,7 @@
         </div>
         {{ end }}
 
-        {{ if site.Params.features.tags.enable }}
+        {{ if $tagsEnabled }}
         {{partial "misc/tags.html" .Params.tags }}
         {{ end }}
         <div class="post-content" id="post-content">
