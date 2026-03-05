@@ -71,8 +71,8 @@
         {{ if $navigationEnabled }}
         <div class="col-md-4 col-sm-12">
           <h5>{{ i18n "navigation" }}</h5>
-          {{ if $sections }}
           <ul>
+            {{ if $sections }}
             {{- range sort $sections "section.weight" }}
               {{ if and (.section.enable) (.section.showOnNavbar)}}
                 {{ $sectionID := replace (lower .section.name) " " "-"  }}
@@ -93,8 +93,14 @@
                 {{ end }}
               {{ end }}
             {{ end }}
+            {{ end }}
+            <li class="nav-item">
+              <a class="smooth-scroll" href="{{ "" | absLangURL }}">{{ i18n "home" }}</a>
+            </li>
+            <li class="nav-item">
+              <a class="smooth-scroll" href="{{ "/posts" | absLangURL }}">{{ i18n "courses" }}</a>
+            </li>
           </ul>
-          {{ end }}
         </div>
         {{ end }}
         {{ if (and $contactMeEnabled $author) }}
