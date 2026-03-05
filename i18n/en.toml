@@ -6,8 +6,12 @@ other = "Home"
 one = "Post"
 other = "Posts"
 
-[all_sections]
-other = "All Sections"
+[courses]
+one = "Course"
+other = "Courses"
+
+[all_courses]
+other = "All Courses"
 
 [toc_heading]
 other = "Table of Contents"

@@ -6,8 +6,12 @@ other = "Accueil"
 one = "Article"
 other = "Articles"
 
-[all_sections]
-other = "Toutes les sections"
+[courses]
+one = "Enseignement"
+other = "Enseignements"
+
+[all_courses]
+other = "Tous les enseignements"
 
 [toc_heading]
 other = "Table des matières"
