@@ -19,7 +19,7 @@
 {{ else }}
   {{/* when there is no custom hero, use dark default hero */}}
   {{ if not .Params.hero }}
-    {{ $defaultHeroDarkImage := resources.Get "images/default-hero_dark.jpg" }}
+    {{ $defaultHeroDarkImage := resources.Get "images/default-hero_dark.svg" }}
     {{ if $defaultHeroDarkImage }}
       {{ $heroPermalink = $defaultHeroDarkImage.RelPermalink }}
     {{ end }}
