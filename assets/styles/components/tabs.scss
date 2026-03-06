@@ -1,0 +1,71 @@
+.tab-panel {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+
+    .tab-nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25rem;
+    }
+
+    .tab-nav-button {
+        border: 1px solid rgb(224, 227, 234) !important;
+        // border: 1px solid rgba(get-light-color('accent-color'), 0.28) !important;
+        border-radius: 0.4rem 0.4rem 0 0 !important;
+        background-color: rgba(226, 232, 240, 0.43) !important;
+        color: #6f898f !important;
+        margin-left: 0;
+        margin-bottom: -1px;
+        @include transition();
+        
+        &.active {
+            background-color: get-light-color('bg-card') !important;
+            border-bottom-color: get-light-color('bg-card') !important;
+            color: get-light-color('accent-color') !important;
+        }
+    }
+
+    .tab-content {
+        display: block;
+        clear: both;
+        padding: 0.75rem;
+        border: 1px solid rgb(224, 227, 234);
+        // border: 1px solid rgba(get-light-color('accent-color'), 0.28);
+        border-radius: 0 0.4rem 0.4rem 0.4rem;
+        background-color: get-light-color('bg-card');
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+
+        .tab-item {
+            display: none;
+
+            &.active {
+                display: block;
+            }
+        }
+    }
+
+    .tab-item pre {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+}
+
+html[data-theme='dark'] {
+    .tab-panel {
+        .tab-nav-button {
+            border-color: rgba(get-dark-color('accent-color'), 0.35) !important;
+            background-color: rgba(66, 81, 106, 0.08) !important;
+
+            &.active {
+                background-color: get-dark-color('bg-card') !important;
+                border-bottom-color: get-dark-color('bg-card') !important;
+            }
+        }
+
+        .tab-content {
+            border-color: rgba(get-dark-color('accent-color'), 0.35);
+            background-color: get-dark-color('bg-card');
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+        }
+    }
+}
