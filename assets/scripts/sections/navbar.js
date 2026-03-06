@@ -1,3 +1,37 @@
+const getNavbarState = () => {
+  const topNavbar = document.getElementById('top-navbar')
+  const isHomePage = topNavbar?.classList.contains('homepage')
+  const isTransparent = !!isHomePage && window.scrollY <= 40
+  const theme = document.documentElement?.dataset?.theme
+
+  return { isTransparent, theme }
+}
+
+const setNavbarLogo = () => {
+  const logo = document.getElementById('logo')
+  if (!logo) return
+
+  const { isTransparent, theme } = getNavbarState()
+
+  let sourceId = 'main-logo'
+  if (theme === 'dark') {
+    sourceId = 'dark-logo'
+  } else if (isTransparent) {
+    sourceId = 'inverted-logo'
+  }
+
+  const source =
+    document.getElementById(sourceId) ||
+    document.getElementById('main-logo') ||
+    document.getElementById('inverted-logo') ||
+    document.getElementById('dark-logo')
+
+  const logoURL = source?.getAttribute('src')
+  if (logoURL) {
+    logo.setAttribute('src', logoURL)
+  }
+}
+
 const updateNavBar = () => {
   const topNavbar = document.getElementById('top-navbar')
   const navbarToggler = document.getElementById('navbar-toggler')
@@ -13,12 +47,7 @@ const updateNavBar = () => {
     // color theme selector a.k.a. dark mode
     themeIcon?.classList.remove('svg-inverted')
 
-    // get the main logo from hidden img tag
-    const mainLogo = document.getElementById('main-logo')
-    if (mainLogo) {
-      const logoURL = mainLogo.getAttribute('src')
-      document.getElementById('logo')?.setAttribute('src', logoURL)
-    }
+    setNavbarLogo()
   } else {
     topNavbar?.classList.remove('shadow')
     topNavbar?.classList.add('transparent-navbar')
@@ -29,12 +58,7 @@ const updateNavBar = () => {
     // color theme selector a.k.a. dark mode
     themeIcon?.classList.add('svg-inverted')
 
-    // get the inverted logo from hidden img tag
-    const invertedLogo = document.getElementById('inverted-logo')
-    if (invertedLogo) {
-      const logoURL = invertedLogo.getAttribute('src')
-      document.getElementById('logo')?.setAttribute('src', logoURL)
-    }
+    setNavbarLogo()
   }
 }
 
@@ -47,7 +71,20 @@ document.addEventListener('DOMContentLoaded', function () {
   if (topNavbar?.classList.contains('homepage')) {
     document.addEventListener('scroll', updateNavBar)
     updateNavBar()
+  } else {
+    setNavbarLogo()
   }
+
+  // update logo when the selected theme changes
+  const htmlElement = document.documentElement
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+        setNavbarLogo()
+      }
+    })
+  })
+  observer.observe(htmlElement, { attributes: true })
 
   // Creates a click handler to collapse the navigation when
   // anchors in the mobile nav pop up are clicked

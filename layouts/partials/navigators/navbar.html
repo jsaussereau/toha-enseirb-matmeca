@@ -4,7 +4,7 @@
 {{ $notesEnabled  := site.Params.features.notes.enable  | default false }}
 {{ $notesTitle := site.Params.features.notes.title  | default (i18n "notes") }}
 {{ $maxVisibleSections   := site.Params.topNavbar.maxVisibleSections   | default 5 }}
-{{ $blurredNavbar := site.Params.topNavbar.blurTransparentNavbar | default true }}
+{{ $blurredNavbar := site.Params.topNavbar.blurTransparentNavbar | default false }}
 {{ $themeEnabled  := site.Params.features.theme.enable | default true }}
 
 {{/*  keep backward compatibility for blog post  */}}
@@ -12,10 +12,10 @@
   {{ $blogEnabled = true }}
 {{ end }}
 
-{{/* by default, don't use any logo */}}
-{{ $mainLogo := "" }}
-{{ $invertedLogo := "" }}
-{{ $darkLogo := "" }}
+{{/* default logos */}}
+{{ $mainLogo := "images/navbar-logo.svg" }}
+{{ $invertedLogo := "images/navbar-logo_dark.svg" }}
+{{ $darkLogo := "images/navbar-logo_dark.svg" }}
 
 {{/*  if custom logo has been provided, use them  */}}
 {{ if site.Params.logo.main }}
@@ -68,9 +68,13 @@
   {{ $sections = (index site.Data site.Language.Lang).sections }}
 {{ end }}
 
-{{ $navBarTitle := (index site.Data site.Language.Lang).site.navBarTitle }}
-{{ if not $navBarTitle }}
-  {{ $navBarTitle = site.Title }}
+{{ $showTitleInNavbar := site.Params.features.showTitleInNavbar | default false }}
+{{ $navBarTitle := "" }}
+{{ if $showTitleInNavbar }}
+  {{ $navBarTitle = (index site.Data site.Language.Lang).site.navBarTitle }}
+  {{ if not $navBarTitle }}
+    {{ $navBarTitle = site.Title }}
+  {{ end }}
 {{ end }}
 
 <nav class="navbar navbar-expand-xl top-navbar shadow {{ if .IsHome}}transparent-navbar homepage{{end}}{{ if $blurredNavbar }} blurred{{ end }}" id="top-navbar">

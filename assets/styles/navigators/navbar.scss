@@ -30,7 +30,7 @@
     text-decoration: none !important;
     font-weight: 600;
     img {
-      width: 42px;
+      height: 50px;
       padding: 5px;
       margin-left: -10px;
     }
@@ -120,7 +120,8 @@
   }
 
   &.transparent-navbar {
-    background-color: transparent !important;
+    // background-color: transparent !important;
+    background-color: get-dark-color('bg-primary') !important;
     .navbar-brand {
       color: get-light-color('inverse-text-color');
       font-weight: 600;
