@@ -67,7 +67,7 @@
 
       <!--Content Start-->
       <div class="page-content">
-        {{ if site.Params.features.blog.showAuthor | default false }}
+        {{ if site.Params.features.blog.showAuthor | default true }}
         <div class="author-profile ms-auto align-self-lg-center">
           <img class="rounded-circle" src='{{ partial "helpers/get-author-image.html" . }}' alt="Author Image">
           <h5 class="author-name">{{ partial "helpers/get-author-name.html" . }}</h5>
