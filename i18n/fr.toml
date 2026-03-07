@@ -137,6 +137,9 @@ other = "Chercher"
 one = "minute"
 other = "minutes"
 
+[back]
+other = "Retour"
+
 [list_view_mode]
 other = "Affichage"
 

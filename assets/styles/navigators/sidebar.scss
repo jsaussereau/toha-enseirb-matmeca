@@ -86,7 +86,33 @@
 
       .sidebar-button {
         padding: 0 !important;
-        margin: 5px 5% 5px 5% !important;
+        // margin: 5px 5% 5px 5% !important;
+      }
+
+      .sidebar-button-row {
+        display: flex;
+        gap: 0.5rem;
+        margin: 5px 5%;
+
+        .sidebar-button {
+          margin: 0 !important;
+        }
+
+        .sidebar-button:first-child {
+          flex: 0 0 auto;
+
+          .btn {
+            width: auto;
+          }
+        }
+
+        .sidebar-button:last-child {
+          flex: 1 1 auto;
+
+          .btn {
+            width: 100%;
+          }
+        }
       }
 
       .sidebar-tree {

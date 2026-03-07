@@ -1,0 +1,13 @@
+{{ $menuItems := .menuItems }}
+{{ $targetId := .targetId }}
+{{ $scratch := .scratch }}
+
+{{ if and $menuItems $targetId (not ($scratch.Get "menuItem")) }}
+  {{ range $menuItems }}
+    {{ if eq .Identifier $targetId }}
+      {{ $scratch.Set "menuItem" . }}
+    {{ else if .HasChildren }}
+      {{ partial "helpers/find-menu-item-by-id.html" (dict "menuItems" .Children "targetId" $targetId "scratch" $scratch) }}
+    {{ end }}
+  {{ end }}
+{{ end }}

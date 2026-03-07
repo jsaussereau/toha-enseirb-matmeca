@@ -10,40 +10,72 @@
   {{ $isPost := and .IsPage (eq .Section "posts") }}
   {{ $allSectionsButton  := site.Params.features.blog.allSectionsButton | default (i18n "all_courses") }}
   {{ $navbarCurrentSectionOnly := site.Params.features.blog.navbarCurrentSectionOnly | default true }}
+  {{ $parentId := "" }}
+  {{ if isset .Params.menu "sidebar" }}
+    {{ $parentId = .Params.menu.sidebar.parent }}
+  {{ end }}
+  {{ $parentMenu := "" }}
+  {{ if $parentId }}
+    {{ $scratch := newScratch }}
+    {{ partial "helpers/find-menu-item-by-id.html" (dict "menuItems" site.Menus.sidebar "targetId" $parentId "scratch" $scratch) }}
+    {{ $parentMenu = $scratch.Get "menuItem" }}
+  {{ end }}
+  {{ $backHref := "posts" | relLangURL }}
+  {{ if $parentMenu }}
+    {{ $backHref = $parentMenu.URL | relLangURL }}
+  {{ end }}
   <section class="sidebar-section" id="sidebar-section">
     <div class="sidebar-holder{{ if $isPost }} in-post{{ end }}">
       <div class="sidebar{{ if $isPost }} in-post{{ end }}" id="sidebar">
-        <form class="mx-auto" method="get" action="{{ "search" | relLangURL }}">
+        {{/*  <form class="mx-auto" method="get" action="{{ "search" | relLangURL }}">
           <input type="text" name="keyword" value="" placeholder="{{ i18n "search" }}" data-search="" id="search-box" />
-        </form>
+        </form>  */}}
+        <div style="margin-bottom: 30px;"></div>
         {{ if and $isPost $navbarCurrentSectionOnly}}
-          <div class="sidebar-button">
-            <button class="btn filled-button" data-href="{{ .Type | relLangURL }}" data-filter="all" onclick="window.location.href=this.dataset.href">
-              <i class="fa-solid fa-circle-arrow-left" style="margin-right: 5px;"></i>
-              {{ $allSectionsButton }}
-            </button>
+          <div class="sidebar-button-row">
+            <div class="sidebar-button">
+              <button
+                class="btn filled-button"
+                type="button"
+                data-href="{{ $backHref }}"
+                onclick="window.location.href=this.dataset.href"
+              >
+                <i class="fa-solid fa-circle-arrow-left" style="margin-right: 5px;"></i>
+                {{ i18n "back" }}
+              </button>
+            </div>
+            <div class="sidebar-button">
+              <button class="btn filled-button" data-href="{{ .Type | relLangURL }}" data-filter="all" onclick="window.location.href=this.dataset.href">
+                <i class="fa-solid fa-circle-arrow-up" style="margin-right: 5px;"></i>
+                {{ $allSectionsButton }}
+              </button>
+            </div>
           </div>
         {{ end }}
         <div class="sidebar-tree section-sidebar-tree">
           <ul class="tree" id="tree">
             {{ if and $isPost $navbarCurrentSectionOnly}}
-              {{ $parent := "" }}
-              {{ if isset .Params.menu "sidebar" }}
-                {{ $parent = .Params.menu.sidebar.parent }}
-              {{ end }}
-              {{ if $parent }}
+              {{ if $parentId }}
                 {{ $currentPage := . }}
-                {{ range site.Menus.sidebar }}
-                  {{ if eq .Identifier $parent }}
-                    <li id="list-heading"><a href="{{ .URL | relLangURL }}">{{ .Name }}</a></li>
+                {{ if $parentMenu }}
+                    <li id="list-heading"><a href="{{ $parentMenu.URL | relLangURL }}">{{ $parentMenu.Name }}</a></li>
                     <div class="subtree section-subtree">
-                      {{ partial "navigators/sidebar.html" (dict "menuName" "sidebar" "menuItems" .Children "ctx" $currentPage) }}
+                      {{ partial "navigators/sidebar.html" (dict "menuName" "sidebar" "menuItems" $parentMenu.Children "ctx" $currentPage) }}
                     </div>
-                  {{ end }}
+                {{ else }}
+                  <li id="list-heading"><a href="{{ "posts" | relLangURL }}" data-filter="all">{{ i18n "posts" }}</a></li>
+                  <div class="subtree">
+                    {{ partial "navigators/sidebar.html" (dict "menuName" "sidebar" "menuItems" site.Menus.sidebar "ctx" .) }}
+                  </div>
                 {{ end }}
+              {{ else }}
+                <li id="list-heading"><a href="{{ "posts" | relLangURL }}" data-filter="all">{{ i18n "posts" }}</a></li>
+                <div class="subtree">
+                  {{ partial "navigators/sidebar.html" (dict "menuName" "sidebar" "menuItems" site.Menus.sidebar "ctx" .) }}
+                </div>
               {{ end }}
             {{ else }}
-              <li id="list-heading"><a href="{{ " /posts/" | relLangURL }}" data-filter="all">{{ i18n "posts" }}</a></li>
+              <li id="list-heading"><a href="{{ "posts" | relLangURL }}" data-filter="all">{{ i18n "posts" }}</a></li>
               <div class="subtree">
                 {{ partial "navigators/sidebar.html" (dict "menuName" "sidebar" "menuItems" site.Menus.sidebar "ctx" .) }}
               </div>

@@ -137,6 +137,9 @@ other = "Search"
 one = "minute"
 other = "minutes"
 
+[back]
+other = "Back"
+
 [list_view_mode]
 other = "Display"
 
