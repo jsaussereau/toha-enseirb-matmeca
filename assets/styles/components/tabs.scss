@@ -4,8 +4,12 @@
 
     .tab-nav {
         display: flex;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
         gap: 0.25rem;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
     }
 
     .tab-nav-button {
@@ -15,13 +19,22 @@
         background-color: rgba(226, 232, 240, 0.43) !important;
         color: #6f898f !important;
         margin-left: 0;
-        margin-bottom: -1px;
+        margin-bottom: -2px;
+        line-height: 1rem;
+        padding: 0.75rem 0.5rem;
+        z-index: 3;
         @include transition();
         
         &.active {
             background-color: get-light-color('bg-card') !important;
             border-bottom-color: get-light-color('bg-card') !important;
             color: get-light-color('accent-color') !important;
+        }
+    }
+
+    @include media('<=small') {
+        .tab-nav-button {
+        padding: 0.25rem 0.5rem;
         }
     }
 
@@ -34,6 +47,9 @@
         border-radius: 0 0.4rem 0.4rem 0.4rem;
         background-color: get-light-color('bg-card');
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+        margin-top: -1px;
+        position: relative;
+        z-index: 1;
 
         .tab-item {
             display: none;
