@@ -136,3 +136,12 @@ other = "Search"
 [minute]
 one = "minute"
 other = "minutes"
+
+[list_view_mode]
+other = "Display"
+
+[list_view_sections]
+other = "By sections"
+
+[list_view_posts]
+other = "All posts"

@@ -136,3 +136,12 @@ other = "Chercher"
 [minute]
 one = "minute"
 other = "minutes"
+
+[list_view_mode]
+other = "Affichage"
+
+[list_view_sections]
+other = "Par sections"
+
+[list_view_posts]
+other = "Tous les articles"

@@ -3,9 +3,20 @@
 {{ end }}
 
 {{ define "sidebar" }}
-  {{ $homePage:="#" }}
+  {{ $homePage := "#" }}
   {{ if hugo.IsMultilingual }}
-    {{ $homePage = (path.Join (cond ( eq .Language.Lang "en") "" .Language.Lang) .Type) }}
+    {{ $homePage = (path.Join (cond (eq .Language.Lang "en") "" .Language.Lang) .Type) }}
+  {{ end }}
+
+  {{ $groupByCategoryDefault := site.Params.features.blog.groupByCategory | default true }}
+  {{ $hasSectionCards := false }}
+  {{ $sections := sort .Sections "Weight" }}
+  {{ range $sections }}
+    {{ $sectionPosts := where .RegularPagesRecursive "Layout" "!=" "search" }}
+    {{ $sectionPosts = where $sectionPosts "Params.hidden" "!=" true }}
+    {{ if gt (len $sectionPosts) 0 }}
+      {{ $hasSectionCards = true }}
+    {{ end }}
   {{ end }}
 
   <section class="sidebar-section" id="sidebar-section">
@@ -14,12 +25,27 @@
         <form class="mx-auto" method="get" action="{{ "search" | relLangURL }}">
           <input type="text" name="keyword" value="" placeholder="{{ i18n "search" }}" data-search="" id="search-box" />
         </form>
+
+        {{ if $hasSectionCards }}
+          <div class="list-view-mode-wrapper">
+            <label for="list-view-mode" class="list-view-mode-label">{{ i18n "list_view_mode" }}</label>
+            <select
+              id="list-view-mode"
+              class="form-select form-select-sm"
+              data-default-mode="{{ if $groupByCategoryDefault }}sections{{ else }}posts{{ end }}"
+            >
+              <option value="sections">{{ i18n "list_view_sections" }}</option>
+              <option value="posts">{{ i18n "list_view_posts" }}</option>
+            </select>
+          </div>
+        {{ end }}
+
         <div class="sidebar-tree">
           <ul class="tree" id="tree">
-            {{ $listHeadingText  := site.Params.features.blog.title | default (i18n "courses") }}
+            {{ $listHeadingText := site.Params.features.blog.title | default (i18n "courses") }}
             <li id="list-heading"><a href="{{ .Type | relLangURL }}" data-filter="all">{{ $listHeadingText }}</a></li>
             <div class="subtree">
-                {{ partial "navigators/sidebar.html" (dict "menuName" "sidebar" "menuItems" site.Menus.sidebar "ctx" .) }}
+              {{ partial "navigators/sidebar.html" (dict "menuName" "sidebar" "menuItems" site.Menus.sidebar "ctx" .) }}
             </div>
           </ul>
         </div>
@@ -31,24 +57,24 @@
 {{ define "content" }}
 <section class="content-section" id="content-section">
   <div class="content container-fluid" id="content">
-    {{ $groupByCategory := site.Params.features.blog.groupByCategory | default true }}
+    {{ $groupByCategoryDefault := site.Params.features.blog.groupByCategory | default true }}
     {{ $tagsEnabled := site.Params.features.blog.tags.enable | default true }}
     {{ $tagsOnCard := site.Params.features.blog.tags.on_card | default true }}
 
     {{ $sectionCards := slice }}
-    {{ if $groupByCategory }}
-      {{ $sections := sort .Sections "Weight" }}
-      {{ range $sections }}
-        {{ $sectionPosts := where .RegularPagesRecursive "Layout" "!=" "search" }}
-        {{ $sectionPosts = where $sectionPosts "Params.hidden" "!=" true }}
-        {{ if gt (len $sectionPosts) 0 }}
-          {{ $sectionCards = $sectionCards | append . }}
-        {{ end }}
+    {{ $sections := sort .Sections "Weight" }}
+    {{ range $sections }}
+      {{ $sectionPosts := where .RegularPagesRecursive "Layout" "!=" "search" }}
+      {{ $sectionPosts = where $sectionPosts "Params.hidden" "!=" true }}
+      {{ if gt (len $sectionPosts) 0 }}
+        {{ $sectionCards = $sectionCards | append . }}
       {{ end }}
     {{ end }}
 
+    {{ $showSectionsByDefault := and $groupByCategoryDefault (gt (len $sectionCards) 0) }}
+
     {{ if gt (len $sectionCards) 0 }}
-      <div class="container-fluid post-card-holder" id="post-card-holder">
+      <div class="container-fluid post-card-holder{{ if not $showSectionsByDefault }} d-none{{ end }}" id="section-card-view">
         {{ range $sectionCards }}
           {{ $sectionPosts := where .RegularPagesRecursive "Layout" "!=" "search" }}
           {{ $sectionPosts = where $sectionPosts "Params.hidden" "!=" true }}
@@ -77,24 +103,25 @@
           </div>
         {{ end }}
       </div>
-    {{ else }}
-      <div class="container-fluid post-card-holder" id="post-card-holder">
-        {{ $posts := where .RegularPagesRecursive "Layout" "!=" "search" }}
-        {{ $posts = where $posts "Params.hidden" "!=" true }}
-        {{ $numShow := site.Params.features.pagination.maxPostsPerPage | default 12}}
-        {{ $paginator := .Paginate $posts $numShow }}
-        {{ range $paginator.Pages }}
-          {{ if .Layout }}
-            {{/* ignore the search.md file*/}}
-          {{ else }}
-            {{ partial "cards/post.html" . }}
-          {{ end }}
-        {{ end }}
-      </div>
-      <div class="paginator">
-        {{/*  {{ partial "pagination.html" . }}  */}}
-      </div>
     {{ end }}
+
+    <div class="container-fluid post-card-holder{{ if $showSectionsByDefault }} d-none{{ end }}" id="post-list-view">
+      {{ $posts := where .RegularPagesRecursive "Layout" "!=" "search" }}
+      {{ $posts = where $posts "Params.hidden" "!=" true }}
+      {{ $numShow := site.Params.features.pagination.maxPostsPerPage | default 12 }}
+      {{ $paginator := .Paginate $posts $numShow }}
+      {{ range $paginator.Pages }}
+        {{ if .Layout }}
+          {{/* ignore the search.md file */}}
+        {{ else }}
+          {{ partial "cards/post.html" . }}
+        {{ end }}
+      {{ end }}
+    </div>
+
+    <div class="paginator{{ if $showSectionsByDefault }} d-none{{ end }}" id="post-list-paginator">
+      {{/*  {{ partial "pagination.html" . }}  */}}
+    </div>
   </div>
 </section>
 {{ end }}
