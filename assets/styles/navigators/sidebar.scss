@@ -256,6 +256,7 @@
       @include transition();
 
       .sidebar-holder {
+        margin: 15px 0px;
         max-height: 200vh;
         @include transition();
 
