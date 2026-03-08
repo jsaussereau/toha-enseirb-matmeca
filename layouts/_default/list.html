@@ -9,14 +9,19 @@
   {{ end }}
 
   {{ $groupByCategoryDefault := site.Params.features.blog.groupByCategory | default true }}
-  {{ $hasSectionCards := false }}
+  {{ $hasGroupedCards := false }}
   {{ $sections := sort .Sections "Weight" }}
   {{ range $sections }}
     {{ $sectionPosts := where .RegularPagesRecursive "Layout" "!=" "search" }}
     {{ $sectionPosts = where $sectionPosts "Params.hidden" "!=" true }}
     {{ if gt (len $sectionPosts) 0 }}
-      {{ $hasSectionCards = true }}
+      {{ $hasGroupedCards = true }}
     {{ end }}
+  {{ end }}
+  {{ $directPosts := where .RegularPages "Layout" "!=" "search" }}
+  {{ $directPosts = where $directPosts "Params.hidden" "!=" true }}
+  {{ if gt (len $directPosts) 0 }}
+    {{ $hasGroupedCards = true }}
   {{ end }}
 
   <section class="sidebar-section" id="sidebar-section">
@@ -26,7 +31,7 @@
           <input type="text" name="keyword" value="" placeholder="{{ i18n "search" }}" data-search="" id="search-box" />
         </form>
 
-        {{ if $hasSectionCards }}
+        {{ if $hasGroupedCards }}
           <div class="list-view-mode-wrapper">
             <label for="list-view-mode" class="list-view-mode-label">{{ i18n "list_view_mode" }}</label>
             <select
@@ -62,6 +67,8 @@
     {{ $tagsOnCard := site.Params.features.blog.tags.on_card | default true }}
 
     {{ $sectionCards := slice }}
+    {{ $directPosts := where .RegularPages "Layout" "!=" "search" }}
+    {{ $directPosts = where $directPosts "Params.hidden" "!=" true }}
     {{ $sections := sort .Sections "Weight" }}
     {{ range $sections }}
       {{ $sectionPosts := where .RegularPagesRecursive "Layout" "!=" "search" }}
@@ -71,10 +78,10 @@
       {{ end }}
     {{ end }}
 
-    {{ $showSectionsByDefault := and $groupByCategoryDefault (gt (len $sectionCards) 0) }}
+    {{ $showGroupedByDefault := and $groupByCategoryDefault (gt (add (len $sectionCards) (len $directPosts)) 0) }}
 
-    {{ if gt (len $sectionCards) 0 }}
-      <div class="container-fluid post-card-holder{{ if not $showSectionsByDefault }} d-none{{ end }}" id="section-card-view">
+    {{ if gt (add (len $sectionCards) (len $directPosts)) 0 }}
+      <div class="container-fluid post-card-holder{{ if not $showGroupedByDefault }} d-none{{ end }}" id="section-card-view">
         {{ range $sectionCards }}
           {{ $sectionPosts := where .RegularPagesRecursive "Layout" "!=" "search" }}
           {{ $sectionPosts = where $sectionPosts "Params.hidden" "!=" true }}
@@ -102,10 +109,14 @@
             </div>
           </div>
         {{ end }}
+
+        {{ range $directPosts }}
+          {{ partial "cards/post.html" . }}
+        {{ end }}
       </div>
     {{ end }}
 
-    <div class="container-fluid post-card-holder{{ if $showSectionsByDefault }} d-none{{ end }}" id="post-list-view">
+    <div class="container-fluid post-card-holder{{ if $showGroupedByDefault }} d-none{{ end }}" id="post-list-view">
       {{ $posts := where .RegularPagesRecursive "Layout" "!=" "search" }}
       {{ $posts = where $posts "Params.hidden" "!=" true }}
       {{ $numShow := site.Params.features.pagination.maxPostsPerPage | default 12 }}
@@ -119,7 +130,7 @@
       {{ end }}
     </div>
 
-    <div class="paginator{{ if $showSectionsByDefault }} d-none{{ end }}" id="post-list-paginator">
+    <div class="paginator{{ if $showGroupedByDefault }} d-none{{ end }}" id="post-list-paginator">
       {{/*  {{ partial "pagination.html" . }}  */}}
     </div>
   </div>
