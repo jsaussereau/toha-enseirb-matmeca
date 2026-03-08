@@ -21,5 +21,7 @@ module:
     target: static/flags
   - source: ../../node_modules/@fontsource/mulish/files
     target: static/files
+  - source: ../../node_modules/@fortawesome/fontawesome-free/webfonts
+    target: static/webfonts
   - source: ../../node_modules/katex/dist/fonts
     target: static/fonts

@@ -11,6 +11,13 @@
 @import '@fontsource/mulish/600';
 @import '@fontsource/mulish/700';
 
+// Font Awesome webfonts (served from /webfonts via Hugo module mounts)
+$fa-font-path: '/webfonts';
+@import '@fortawesome/fontawesome-free/scss/fontawesome';
+@import '@fortawesome/fontawesome-free/scss/solid';
+@import '@fortawesome/fontawesome-free/scss/regular';
+@import '@fortawesome/fontawesome-free/scss/brands';
+
 @import './variables';
 @import './mixins';
 
