@@ -1,6 +1,11 @@
-<div class="row">
+<div class="row shortcode-split">
     {{ range $idx, $val := split .Inner "---" }}
-       <div class="col col-sm-12 col-lg-{{ $.Get $idx }}">
+        {{ $rawWidth := $.Get $idx | default "100" }}
+        {{ $width := printf "%v" $rawWidth }}
+        {{ if not (hasSuffix $width "%") }}
+            {{ $width = printf "%s%%" $width }}
+        {{ end }}
+        <div class="col-12 shortcode-split-col" style="--split-col-width: {{ $width }};">
             {{ $val | markdownify }}
         </div>
     {{ end }}

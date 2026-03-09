@@ -36,6 +36,23 @@ pre {
     }
   }
 }
+
+.shortcode-split {
+  .shortcode-split-col {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+@include media('>=large') {
+  .shortcode-split {
+    .shortcode-split-col {
+      flex: 0 0 var(--split-col-width, 100%);
+      max-width: var(--split-col-width, 100%);
+    }
+  }
+}
+
  $alert-types: ('success', 'info', 'warning', 'danger');
 
 .alert {
