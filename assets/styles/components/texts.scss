@@ -16,6 +16,14 @@ p {
   text-justify: inter-word;
 }
 
+sup[id^='fnref'] {
+  white-space: nowrap;
+
+  &::before {
+    content: none;
+  }
+}
+
 input {
   color: get-light-color('text-color');
 }
