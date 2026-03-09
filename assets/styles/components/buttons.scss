@@ -135,7 +135,8 @@
   float: right;
   margin-top: 0.5em;
   margin-left: -2.6em;
-  margin-right: 3em;
+  // margin-right: 3em;
+  transform: translateX(-15px);
 
   background-color: get-light-color('text-color') !important;
   color: get-light-color('inverse-text-color') !important;
