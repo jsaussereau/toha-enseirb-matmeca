@@ -5,8 +5,12 @@ table {
   padding: 0.1rem;
   thead {
     tr {
-      background: get-light-color('accent-color');
+      background: get-light-color('bg-table-thread');
       color: get-light-color('text-over-accent-color');
+    }
+      
+    th::selection {
+      background: get-light-color('selected-text-over-accent-color');
     }
   }
 
@@ -78,8 +82,12 @@ html[data-theme='dark'] {
     border: 1px solid rgba(get-dark-color('accent-color'), 0.1);
     thead {
       tr {
-        background: get-dark-color('accent-color');
+        background: get-dark-color('bg-table-thread');
         color: get-dark-color('text-over-accent-color');
+      }
+
+      th::selection {
+        background: get-dark-color('selected-text-over-accent-color');
       }
     }
 
@@ -87,10 +95,10 @@ html[data-theme='dark'] {
       tr {
         color: get-dark-color('text-color');
         &:nth-child(odd) {
-          background-color: get-dark-color('bg-primary');
+          background-color: #bfdaff1f;
         }
         &:nth-child(even) {
-          background-color: rgba(get-dark-color('accent-color'), 0.05);
+          background-color: #bfdaff08;
         }
       }
     }
