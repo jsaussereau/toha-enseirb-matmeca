@@ -25,6 +25,8 @@ blockquote {
   background-color: rgba(get-light-color('accent-color'), 0.05);
   padding: 0.3rem;
   padding-left: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  border-radius: 4px;
 
   & > p {
     color: get-light-color('text-color');
