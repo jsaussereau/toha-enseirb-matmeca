@@ -73,6 +73,33 @@ pre {
   }
 }
 
+details > summary.admonition-header {
+  list-style: none;
+  cursor: pointer;
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+
+  &::marker {
+    content: '';
+  }
+
+  &::after {
+    content: '\f138';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    margin-right: 0.5rem;
+    display: inline-block;
+    vertical-align: middle;
+    @include transition();
+  }
+}
+
+details[open] > summary.admonition-header::before {
+  transform: rotate(90deg);
+}
+
 html[data-theme='dark'] {
   pre {
     background-color: get-dark-color('bg-pre') !important;
