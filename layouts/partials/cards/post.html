@@ -15,8 +15,9 @@
       <a href="{{ $postLink }}" class="post-card-link"{{ if $isExternal }} target="_blank" rel="noopener"{{ end }}>
         {{ if $isExternal }}
           <i class="fa-solid fa-arrow-up-right-from-square" style="margin-right: 5px;"></i>
+        {{ else }}
+          <i class="fa-solid fa-newspaper" style="margin-right: 6px;"></i>
         {{ end }}
-        <i class="fa-solid fa-newspaper" style="margin-right: 6px;"></i>
         <h5 class="card-title" style="display: inline;">{{ .Title }}</h5>
         <p class="card-text post-summary">{{ .Summary | plainify }}</p>
       </a>
