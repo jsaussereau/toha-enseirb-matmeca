@@ -22,6 +22,10 @@ pre {
   margin: 5px;
   padding: 10px 15px;
   color: #f8f8f2;
+
+  & > code {
+    color: #f8f8f2 !important;
+  }
 }
 
 @include media('<=large') {
