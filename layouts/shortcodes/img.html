@@ -34,7 +34,7 @@
         height="{{.Get "height"}}"
     {{end}}
     {{ if .Get "float" }}
-        style="float: {{.Get "float"}};"
+        style="float: {{.Get "float"}}; margin: 5px 10px;"
     {{end}}
     {{ if gt (len $lightClasses) 0 }}
         class="{{ delimit $lightClasses " " }}"
@@ -53,7 +53,7 @@
     height="{{.Get "height"}}"
   {{end}}
     {{ if .Get "float" }}
-        style="float: {{.Get "float"}};"
+        style="float: {{.Get "float"}}; margin: 5px 10px;"
     {{end}}
   {{ if gt (len $darkClasses) 0 }}
     class="{{ delimit $darkClasses " " }}"

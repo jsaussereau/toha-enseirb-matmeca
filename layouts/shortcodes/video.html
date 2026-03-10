@@ -33,14 +33,12 @@
     {{end}}
     {{ if .Get "width" }}
         width="{{.Get "width"}}"
-    {{ else }}
-        width="100%"
     {{end}}
     {{ if .Get "height" }}
         height="{{.Get "height"}}"
     {{end}}
     {{ if .Get "float" }}
-        style="float: {{.Get "float"}};"
+        style="float: {{.Get "float"}}; margin: 5px 10px;"
     {{end}}
     {{ if gt (len $classes) 0 }}
         class="{{ delimit $classes " " }}"
