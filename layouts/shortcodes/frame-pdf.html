@@ -1,0 +1,29 @@
+{{- $src := .Get "src" -}}
+{{- if not $src -}}
+	{{- errorf "The %q shortcode requires a 'src' argument: %s" .Name .Position -}}
+{{- end -}}
+
+{{- $page := .Get "page" -}}
+{{- $width := .Get "width" | default "100%" -}}
+{{- $height := .Get "height" | default "800" -}}
+{{- $title := .Get "title" | default "PDF" -}}
+{{- $class := .Get "class" -}}
+
+{{- $iframeSrc := $src -}}
+{{- if $page -}}
+	{{- if in $iframeSrc "#" -}}
+		{{- $iframeSrc = printf "%s&page=%v" $iframeSrc $page -}}
+	{{- else -}}
+		{{- $iframeSrc = printf "%s#page=%v" $iframeSrc $page -}}
+	{{- end -}}
+{{- end -}}
+
+<iframe
+	src="{{ $iframeSrc | safeURL }}"
+	title="{{ $title }}"
+	width="{{ $width }}"
+	height="{{ $height }}"
+	style="border: 0;"
+	loading="lazy"
+	{{- with $class }} class="{{ . }}"{{ end -}}
+></iframe>
