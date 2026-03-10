@@ -1,0 +1,42 @@
+
+.pdf-canvas {
+  max-width: 100%;
+  border-radius: 0 0 10px 10px;
+}
+
+.paginator {
+  display: flex !important;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+	background: get-light-color('bg-secondary');
+  border-radius: 10px 10px 0 0;
+  width: calc(100%) !important;
+	padding: 10px;
+}
+
+.page-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0px 10px;
+  line-height: 1em;
+}
+
+.next-prev-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+html[data-theme='dark'] {
+  .pdf-viewer {
+    .paginator {
+      background: get-dark-color('bg-pre') !important;
+    }
+  }
+
+  .download-pdf-btn {
+    color: inherit !important;
+  }
+}

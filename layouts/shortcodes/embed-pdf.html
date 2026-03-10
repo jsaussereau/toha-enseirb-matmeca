@@ -6,18 +6,25 @@
 <div class="pdf-viewer" data-url="{{ $url }}" data-hide-paginator="{{ $hidePaginator }}"
   data-hide-loader="{{ $hideLoader }}" data-page-num="{{ $pageNum }}">
   <div class="paginator">
-    <div class="page-number-indicator">
-      <span>Page: <span class="page-num"></span> / <span class="page-count"></span></span>
-    </div>
-    <div class="next-prev-btn">
-      <button class="prev btn btn-sm btn-info">Previous</button>
-      <button class="next btn btn-sm btn-info">Next</button>
-    </div>
-
     <div class="download-btn">
       <a href="{{ $url }}" download class="btn btn-sm btn-info download-pdf-btn">
-        <i class="fas fa-download"></i> Download PDF
+        <i class="fas fa-download"></i> Download
       </a>
+    </div>
+
+    <div class="next-prev-btn">
+      <button class="prev btn btn-sm btn-info">
+        <i class="fas fa-circle-left"></i>
+        Previous
+      </button>
+      <div class="page-info">
+        <div>Page</div> 
+        <div><span class="page-num"></span> / <span class="page-count"></span></div>
+      </div>
+      <button class="next btn btn-sm btn-info">
+        Next
+        <i class="fas fa-circle-right"></i>
+      </button>
     </div>
   </div>
 
