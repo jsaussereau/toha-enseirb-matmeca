@@ -1,7 +1,7 @@
 {{ $url := .Get "src" }}
 {{ $hidePaginator := .Get "hidePaginator" | default "false" }}
 {{ $hideLoader := .Get "hidePaginator" | default "false" }}
-{{ $pageNum := .Get "renderPageNum" | default "1"}}
+{{ $pageNum := .Get "page" | default "1"}}
 
 <div class="pdf-viewer" data-url="{{ $url }}" data-hide-paginator="{{ $hidePaginator }}"
   data-hide-loader="{{ $hideLoader }}" data-page-num="{{ $pageNum }}">
@@ -26,6 +26,7 @@
         <i class="fas fa-circle-right"></i>
       </button>
     </div>
+    
   </div>
 
   <div class="embed-pdf-container">
