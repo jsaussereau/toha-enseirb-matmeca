@@ -8,6 +8,45 @@
 */}}
 {{ $randNumber :=  index (seq 200 | shuffle) 0 }}
 
-<video class="video-player" id="video-{{ $randNumber }}" playsinline controls>
+{{- $classes := slice -}}
+{{- $classes = $classes | append "video-player" -}}
+{{- with .Get "align" -}}
+  {{- $classes = $classes | append . -}}
+{{- end -}}
+{{- with .Get "verticalMargin" -}}
+  {{- $classes = $classes | append "vertical-margin" -}}
+{{- end -}}
+{{- $rounded := false -}}
+{{- with .Get "rounded" -}}
+  {{- $roundedValue := lower (trim (printf "%v" .) " ") -}}
+  {{- if or (eq $roundedValue "1") (eq $roundedValue "true") (eq $roundedValue "yes") (eq $roundedValue "on") -}}
+    {{- $rounded = true -}}
+  {{- end -}}
+{{- end -}}
+{{- if $rounded -}}
+  {{- $classes = $classes | append "rounded" -}}
+{{- end -}}
+
+<video id="video-{{ $randNumber }}"
+    {{ if .Get "title" }}
+        alt="{{.Get "title"}}"
+    {{end}}
+    {{ if .Get "width" }}
+        width="{{.Get "width"}}"
+    {{ else }}
+        width="100%"
+    {{end}}
+    {{ if .Get "height" }}
+        height="{{.Get "height"}}"
+    {{end}}
+    {{ if .Get "float" }}
+        style="float: {{.Get "float"}};"
+    {{end}}
+    {{ if gt (len $classes) 0 }}
+        class="{{ delimit $classes " " }}"
+    {{end}}
+    playsinline
+    controls
+>
   <source src="{{ $src }}" type="{{ $type | default "video/mp4" }}" />
 </video>
