@@ -100,6 +100,27 @@ details[open] > summary.admonition-header::before {
   transform: rotate(90deg);
 }
 
+.inline-icon {
+  display: inline;
+  color: get-light-color('text-color');
+
+  &.shortcode-light-image {
+    display: inline;
+  }
+
+  &.shortcode-dark-image {
+    display: none;
+  }
+
+  &.inverted {
+    filter: invert(100%);
+  }
+
+  &.inverted-light {
+    filter: invert(100%);
+  }
+}
+
 html[data-theme='dark'] {
   pre {
     background-color: get-dark-color('bg-pre') !important;
@@ -131,5 +152,24 @@ html[data-theme='dark'] {
   }
   .admonition-content {
     background-color: get-dark-color('bg-pre') !important;
+  }
+  .inline-icon {
+    color: get-dark-color('text-color');
+
+    &.shortcode-light-image {
+      display: none;
+    }
+
+    &.shortcode-dark-image {
+      display: inline;
+    }
+
+    &.inverted-light {
+      filter: none;
+    }
+
+    &.inverted-dark {
+      filter: invert(100%);
+    }
   }
 }

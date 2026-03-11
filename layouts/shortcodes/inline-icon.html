@@ -1,0 +1,78 @@
+{{- $src := .Get "src" -}}
+{{- if not $src -}}
+	{{- errorf "inline-icon shortcode requires a \"src\" parameter: %s" .Position -}}
+{{- end -}}
+
+{{- $classes := slice "inline-icon" -}}
+{{- with .Get "class" -}}
+	{{- $classes = $classes | append . -}}
+{{- end -}}
+
+{{- $height := "1em" -}}
+{{- with .Get "height" -}}
+	{{- $height = . -}}
+{{- end -}}
+{{- if not $src -}}
+	{{- errorf "inline-icon shortcode requires a \"src\" parameter: %s" .Position -}}
+{{- end -}}
+
+{{- $inverted := false -}}
+{{- with .Get "inverted" -}}
+	{{- $invertedValue := lower (trim (printf "%v" .) " ") -}}
+	{{- if or (eq $invertedValue "1") (eq $invertedValue "true") (eq $invertedValue "yes") (eq $invertedValue "on") -}}
+		{{- $inverted = true -}}
+	{{- end -}}
+{{- end -}}
+{{- if $inverted -}}
+	{{- $classes = $classes | append "inverted" -}}
+{{- end -}}
+
+{{- $invertLight := false -}}
+{{- with .Get "invertLight" -}}
+	{{- $invertLightValue := lower (trim (printf "%v" .) " ") -}}
+	{{- if or (eq $invertLightValue "1") (eq $invertLightValue "true") (eq $invertLightValue "yes") (eq $invertLightValue "on") -}}
+		{{- $invertLight = true -}}
+	{{- end -}}
+{{- end -}}
+{{- if $invertLight -}}
+	{{- $classes = $classes | append "inverted-light" -}}
+{{- end -}}
+
+{{- $invertDark := false -}}
+{{- with .Get "invertDark" -}}
+	{{- $invertDarkValue := lower (trim (printf "%v" .) " ") -}}
+	{{- if or (eq $invertDarkValue "1") (eq $invertDarkValue "true") (eq $invertDarkValue "yes") (eq $invertDarkValue "on") -}}
+		{{- $invertDark = true -}}
+	{{- end -}}
+{{- end -}}
+{{- if $invertDark -}}
+	{{- $classes = $classes | append "inverted-dark" -}}
+{{- end -}}
+
+{{- $srcDark := .Get "src_dark" -}}
+{{- $lightClasses := $classes -}}
+{{- $darkClasses := $classes -}}
+{{- if $srcDark -}}
+	{{- $lightClasses = $lightClasses | append "shortcode-light-image" -}}
+	{{- $darkClasses = $darkClasses | append "shortcode-dark-image" -}}
+{{- end -}}
+
+<img
+	class="{{ delimit $lightClasses " " }}"
+	src="{{ $src }}"
+	alt="{{ .Get "alt" | default "" }}"
+	{{ with .Get "title" }}title="{{ . }}"{{ end }}
+	{{ with .Get "width" }}width="{{ . }}"{{ end }}
+	style="height: {{ $height }};"
+>
+
+{{- if $srcDark -}}
+<img
+	class="{{ delimit $darkClasses " " }}"
+	src="{{ $srcDark }}"
+	alt="{{ .Get "alt" | default "" }}"
+	{{ with .Get "title" }}title="{{ . }}"{{ end }}
+	{{ with .Get "width" }}width="{{ . }}"{{ end }}
+	style="height: {{ $height }};"
+>
+{{- end -}}
