@@ -46,7 +46,8 @@ window.addEventListener('load', async () => {
   setScheme(loadScheme())
 
   Array.from(menu.getElementsByTagName('a')).forEach((btn) => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', (event) => {
+      event.preventDefault()
       const { scheme } = btn.dataset
       setScheme(scheme)
     })
