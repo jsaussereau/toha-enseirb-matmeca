@@ -1,0 +1,26 @@
+params:
+  features:
+    notes:
+      enable: false
+
+    flags:
+      enable: true
+
+    math:
+      enable: true
+      services:
+        # https://katex.org/docs/autorender.html#api for more configurations
+        katex:
+          delimiters:
+            - left: $$
+              right: $$
+              display: true
+            - left: \\\[
+              right: \\\]
+              display: true
+            - left: $
+              right: $
+              display: false
+            - left: \\\(
+              right: \\\)
+              display: false
