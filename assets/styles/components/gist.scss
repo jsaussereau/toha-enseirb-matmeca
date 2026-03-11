@@ -82,7 +82,14 @@
 
 html[data-theme='dark'] {
   table {
-    border: 1px solid rgba(get-dark-color('accent-color'), 0.1);
+    border: 1px solid rgba(get-dark-color('accent-color'), 0.1) !important;
+
+    th,
+    td,
+    tc {
+      border-right: 1px solid rgba(get-dark-color('accent-color'), 0.1) !important;
+    }
+
     thead {
       tr {
         background: get-dark-color('bg-table-thread');
