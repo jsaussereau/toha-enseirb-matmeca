@@ -1,1 +1,17 @@
-<script src="https://gist.github.com/{{ index .Params 0 }}/{{ index .Params 1 }}.js{{if len .Params | eq 3 }}?file={{ index .Params 2 }}{{end}}"></script>
+{{- $user := "" -}}
+{{- $id := "" -}}
+{{- $file := "" -}}
+
+{{- if .IsNamedParams -}}
+	{{- $user = .Get "user" -}}
+	{{- $id = .Get "id" -}}
+	{{- $file = .Get "file" -}}
+{{- else -}}
+	{{- $user = .Get 0 -}}
+	{{- $id = .Get 1 -}}
+	{{- if ge (len .Params) 3 -}}
+		{{- $file = .Get 2 -}}
+	{{- end -}}
+{{- end -}}
+
+<script src="https://gist.github.com/{{ $user }}/{{ $id }}.js{{ with $file }}?file={{ . }}{{ end }}"></script>
