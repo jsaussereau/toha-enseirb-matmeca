@@ -1,4 +1,35 @@
+
+languages:
+  fr:
+    languageCode: "fr"
+    languageName: "Français"
+    title: "Accueil"
+    weight: 1
+  # en:
+  #   languageCode: "en"
+  #   languageName: "English"
+  #   title: "Home"
+  #   weight: 2
+
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+  tableOfContents:
+    startLevel: 2
+    endLevel: 6
+    ordered: false
+
+outputs:
+  home:
+    - "HTML"
+    - "RSS"
+    - "JSON"
+
+enableEmoji: true
+
 params:
+
   features:
     notes:
       enable: false
