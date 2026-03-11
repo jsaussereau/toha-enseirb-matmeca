@@ -1,0 +1,135 @@
+
+.gist-data {
+  background-color: #ffffff08 !important;
+  border-radius: 10px 10px 0 0 !important;
+  padding-bottom: 10px !important;
+}
+
+.gist-meta {
+  border-radius:  0 0 10px 10px !important;
+  background-color: #f6f8fa !important;
+  border-top: 1px solid rgb(207, 217, 222) !important;
+}
+
+.gist-file {
+  border-radius: 10px !important;
+  border: 1px solid !important;
+  border-color: rgb(207, 217, 222) !important;
+}
+
+.gist {
+  color: inherit !important;
+
+  .heading-element {
+    margin-bottom: 15px !important;
+  }
+  
+  .blockquote {
+    margin: 5px 0px !important;
+    padding: 5px 0 !important;
+  }
+
+  table {
+    margin: 15px 0 !important;
+    border-radius: unset !important;
+    background: unset !important;
+    border: 1px solid rgba(get-light-color('accent-color'), 0.1);
+    border-top: none !important;
+    padding: unset !important;
+
+    tr {
+      height: unset !important;
+    }
+
+    th,
+    td {
+      padding: 5px 15px !important;
+      border-left: unset !important;
+      border-bottom: unset !important;
+    }
+    td,
+    tc {
+      border-right: 1px solid rgba(get-light-color('accent-color'), 0.1);
+    }
+
+    th:last-child,
+    td:last-child {
+      border-right: none !important;
+    }
+
+    thead {
+      tr {
+        background: unset !important;
+        color: unset !important;
+      }
+    }
+
+    tbody {
+      tr {
+        &:nth-child(odd) {
+          background-color: unset !important;
+        }
+        &:nth-child(even) {
+          background-color: #a0a6ac12 !important;
+        }
+        // &:hover {
+        //   background: unset !important;
+        // }
+      }
+    }
+  }
+}
+
+html[data-theme='dark'] {
+  table {
+    border: 1px solid rgba(get-dark-color('accent-color'), 0.1);
+    thead {
+      tr {
+        background: get-dark-color('bg-table-thread');
+        color: get-dark-color('text-over-accent-color');
+      }
+
+      th::selection {
+        background: get-dark-color('selected-text-over-accent-color');
+      }
+    }
+
+    tbody {
+      tr {
+        color: get-dark-color('text-color');
+        &:nth-child(odd) {
+          background-color: #bfdaff1f;
+        }
+        &:nth-child(even) {
+          background-color: #bfdaff08;
+        }
+      }
+    }
+  }
+
+  .gist-meta {
+    background: get-dark-color('bg-pre') !important;
+    border-top: 1px solid get-dark-color('bg-pre') !important;
+  }
+
+  .gist-file {
+    border-color: get-dark-color('bg-pre') !important;
+  }
+
+  .gist {
+    &::-moz-selection{
+      background: get-dark-color('text-color');
+      color: get-dark-color('inverse-text-color');
+    }
+    &::selection{
+      background: get-dark-color('text-color');
+      color: get-dark-color('inverse-text-color');
+    }
+    table {
+      td,
+      tc {
+        border-right: 1px solid rgba(get-dark-color('accent-color'), 0.1);
+      }
+    }
+  }
+}

@@ -35,48 +35,6 @@ table {
   }
 }
 
-.gist {
-  table {
-    border-radius: unset !important;
-    background: unset !important;
-    border: unset !important;
-    padding: unset !important;
-
-    tr {
-      height: unset !important;
-    }
-
-    th,
-    td {
-      padding: unset !important;
-      border-left: unset !important;
-      border-bottom: unset !important;
-    }
-    td,
-    tc {
-      border-right: 1px solid rgba(get-light-color('accent-color'), 0.1);
-    }
-
-    thead {
-      tr {
-        background: unset !important;
-        color: unset !important;
-      }
-    }
-
-    tbody {
-      tr {
-        &:nth-child(odd) {
-          background-color: unset !important;
-        }
-        &:hover {
-          background: unset !important;
-        }
-      }
-    }
-  }
-}
-
 html[data-theme='dark'] {
   table {
     border: 1px solid rgba(get-dark-color('accent-color'), 0.1);
@@ -103,20 +61,4 @@ html[data-theme='dark'] {
       }
     }
   }
-  .gist {
-    &::-moz-selection{
-      background: get-dark-color('text-color');
-      color: get-dark-color('inverse-text-color');
-    }
-    &::selection{
-      background: get-dark-color('text-color');
-      color: get-dark-color('inverse-text-color');
-    }
-    table {
-      td,
-      tc {
-        border-right: 1px solid rgba(get-dark-color('accent-color'), 0.1);
-      }
-    }
-  }
-}
+ }
