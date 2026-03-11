@@ -48,7 +48,7 @@
   {{ if $prevPage }}
     <div class="col-md-6 previous-article">
       <a href="{{ $prevPage.RelPermalink }}" title="{{ $prevPage.Title }}" class="btn filled-button">
-        <div><i class="fas fa-chevron-circle-left"></i> {{ i18n "prev" }}</div>
+        <div><i class="fas fa-chevron-circle-left"></i> <span style="font-weight: bold;">{{ i18n "prev" }}</span></div>
         <div class="next-prev-text">{{ $prevPage.Title }}</div>
       </a>
     </div>
@@ -60,7 +60,7 @@
       {{ end}}
       <div class="{{ $columnWidth }} next-article">
         <a href="{{ $nextPage.RelPermalink }}" title="{{ $nextPage.Title }}" class="btn filled-button">
-          <div>{{ i18n "next" }} <i class="fas fa-chevron-circle-right"></i></div>
+          <div><span style="font-weight: bold;">{{ i18n "next" }}</span> <i class="fas fa-chevron-circle-right"></i></div>
           <div class="next-prev-text">{{ $nextPage.Title }}</div>
         </a>
       </div>
