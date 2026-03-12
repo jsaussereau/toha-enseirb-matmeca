@@ -1,6 +1,17 @@
 window.addEventListener('DOMContentLoaded', () => {
   // =========== Add anchor to the headers ================
+  function shouldSkipAnchor (element) {
+    // Exclude headings inside card-like components or explicit opt-out wrappers.
+    return element.closest('.card, .post-card, .note-card, [data-disable-heading-anchor]') != null
+  }
+
   function addAnchor (element) {
+    if (!element.id || shouldSkipAnchor(element)) {
+      return
+    }
+    if (element.querySelector(':scope > a.header-anchor')) {
+      return
+    }
     element.innerHTML = `<a href="#${element.id}" class="header-anchor">${element.innerHTML}<sup><i class="fas fa-link fa-sm"></i></sup></a>`
   }
 
