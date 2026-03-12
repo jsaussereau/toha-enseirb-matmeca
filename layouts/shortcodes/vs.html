@@ -1,1 +1,7 @@
-<div style="margin-top: {{ .Get 0 }}rem;"></div>
+{{- $value := default "0" (.Get 0) -}}
+{{- $value = trim $value " " -}}
+{{- if findRE `^-?\d*\.?\d+$` $value -}}
+	{{- $value = printf "%srem" $value -}}
+{{- end -}}
+{{- $styleAttr := printf "style=\"margin-top: %s;\"" ($value | safeCSS) -}}
+<div {{ $styleAttr | safeHTMLAttr }}></div>
