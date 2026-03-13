@@ -35,75 +35,8 @@
 {{- end -}}
 
 {{- if $target.IsSection -}}
-  {{- $tagsEnabled := site.Params.features.blog.tags.enable | default true -}}
-  {{- $tagsOnCard := site.Params.features.blog.tags.on_card | default true -}}
-  {{- $sectionSummary := default ($target.Params.summary | plainify) ($target.Description | plainify) -}}
-  {{- $sectionPosts := where $target.RegularPagesRecursive "Layout" "!=" "search" -}}
-  {{- $sectionPosts = where $sectionPosts "Params.hidden" "!=" true -}}
-  {{- $postCount := len $sectionPosts -}}
-  <div class="post-card" {{ $postCardWidthAttr | safeHTMLAttr }}>
-    <div class="card h-100 shadow-sm">
-      <div class="card-head">
-        <a href="{{ $target.RelPermalink }}" class="post-card-link">
-          <img class="card-img-top light-logo" src='{{ partial "helpers/get-hero.html" $target }}' alt="Hero Image">
-          <img class="card-img-top dark-logo" src='{{ partial "helpers/get-hero-dark.html" $target }}' alt="Hero Image">
-        </a>
-      </div>
-      <div class="card-body">
-        <a class="text-decoration-none" href="{{ $target.RelPermalink }}">
-          <h5 class="card-title mb-2"><i class="fa-solid fa-folder-open" style="margin-right: 6px;"></i>{{ $target.Title }}</h5>
-          {{ if $sectionSummary }}
-            <p class="card-text text-muted">{{ $sectionSummary }}</p>
-          {{ end }}
-          {{ if and $tagsEnabled $tagsOnCard }}
-            {{ partial "misc/tags.html" $target.Params.tags }}
-          {{ end }}
-          <p class="card-text text-muted">{{ $postCount }} {{ i18n "posts" $postCount }}</p>
-        </a>
-      </div>
-    </div>
-  </div>
+  {{- partial "cards/section.html" (dict "section" $target "widthAttr" $postCardWidthAttr) -}}
 {{- else -}}
-  {{- $showDate := site.Params.features.blog.showDate | default true -}}
-  {{- $tagsEnabled := site.Params.features.blog.tags.enable | default true -}}
-  {{- $tagsOnCard := site.Params.features.blog.tags.on_card | default true -}}
-  {{- $postLink := partial "helpers/get-post-link.html" $target -}}
-  {{- $isExternal := $target.Params.externalLink -}}
   {{- $summary := default ($target.Params.summary | plainify) ($target.Description | plainify) -}}
-  <div class="post-card" {{ $postCardWidthAttr | safeHTMLAttr }}>
-    <div class="card">
-      <div class="card-head">
-        <a href="{{ $postLink }}" class="post-card-link"{{ if $isExternal }} target="_blank" rel="noopener"{{ end }}>
-          <img class="card-img-top light-logo" src='{{ partial "helpers/get-hero.html" $target }}' alt="Hero Image">
-          <img class="card-img-top dark-logo" src='{{ partial "helpers/get-hero-dark.html" $target }}' alt="Hero Image">
-        </a>
-      </div>
-      <div class="card-body">
-        <a href="{{ $postLink }}" class="post-card-link"{{ if $isExternal }} target="_blank" rel="noopener"{{ end }}>
-          {{ if $isExternal }}
-            <i class="fa-solid fa-arrow-up-right-from-square" style="margin-right: 5px;"></i>
-          {{ else }}
-            <i class="fa-solid fa-newspaper" style="margin-right: 6px;"></i>
-          {{ end }}
-          <h5 class="card-title" style="display: inline;">{{ $target.Title }}</h5>
-          {{ if $summary }}
-            <p class="card-text post-summary">{{ $summary }}</p>
-          {{ end }}
-        </a>
-        {{ if and $tagsEnabled $tagsOnCard }}
-          {{ partial "misc/tags.html" $target.Params.tags }}
-        {{ end }}
-      </div>
-      <div class="card-footer">
-        <span class="float-start">
-          {{ if $showDate }}
-            {{ $target.Date | time.Format ":date_full" }}
-          {{ end }}
-          {{ if site.Params.features.readingTime }} | {{ $target.ReadingTime }} {{ i18n "minute" $target.ReadingTime }} {{ end }}</span>
-        <a
-          href="{{ $postLink }}"
-          class="float-end btn btn-outline-info btn-sm"{{ if $isExternal }} target="_blank" rel="noopener"{{ end }}>{{ i18n "read" }}</a>
-      </div>
-    </div>
-  </div>
+  {{- partial "cards/post-generic.html" (dict "page" $target "summary" $summary "widthAttr" $postCardWidthAttr) -}}
 {{- end -}}

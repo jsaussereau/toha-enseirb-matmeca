@@ -1,0 +1,31 @@
+{{- $section := .section -}}
+{{- $widthAttr := .widthAttr -}}
+{{- $tagsEnabled := site.Params.features.blog.tags.enable | default true -}}
+{{- $tagsOnCard := site.Params.features.blog.tags.on_card | default true -}}
+{{- $summary := default ($section.Params.summary | plainify) ($section.Description | plainify) -}}
+{{- $sectionPosts := where $section.RegularPagesRecursive "Layout" "!=" "search" -}}
+{{- $sectionPosts = where $sectionPosts "Params.hidden" "!=" true -}}
+{{- $postCount := len $sectionPosts -}}
+
+<div class="post-card" {{ $widthAttr | safeHTMLAttr }}>
+  <div class="card h-100 shadow-sm">
+    <div class="card-head">
+      <a href="{{ $section.RelPermalink }}" class="post-card-link">
+        <img class="card-img-top light-logo" src='{{ partial "helpers/get-hero.html" $section }}' alt="Hero Image">
+        <img class="card-img-top dark-logo" src='{{ partial "helpers/get-hero-dark.html" $section }}' alt="Hero Image">
+      </a>
+    </div>
+    <div class="card-body">
+      <a class="text-decoration-none" href="{{ $section.RelPermalink }}">
+        <h5 class="card-title mb-2"><i class="fa-solid fa-folder-open" style="margin-right: 6px;"></i>{{ $section.Title }}</h5>
+        {{ if $summary }}
+          <p class="card-text text-muted">{{ $summary }}</p>
+        {{ end }}
+        {{ if and $tagsEnabled $tagsOnCard }}
+          {{ partial "misc/tags.html" $section.Params.tags }}
+        {{ end }}
+        <p class="card-text text-muted">{{ $postCount }} {{ i18n "posts" $postCount }}</p>
+      </a>
+    </div>
+  </div>
+</div>

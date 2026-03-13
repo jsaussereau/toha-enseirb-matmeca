@@ -1,0 +1,45 @@
+{{- $page := .page -}}
+{{- $showDate := site.Params.features.blog.showDate | default true -}}
+{{- $tagsEnabled := site.Params.features.blog.tags.enable | default true -}}
+{{- $tagsOnCard := site.Params.features.blog.tags.on_card | default true -}}
+{{- $widthAttr := .widthAttr -}}
+{{- $summary := default ($page.Summary | plainify) .summary -}}
+{{- $postLink := partial "helpers/get-post-link.html" $page -}}
+{{- $isExternal := $page.Params.externalLink -}}
+
+<div class="post-card" {{ $widthAttr | safeHTMLAttr }}>
+  <div class="card">
+    <div class="card-head">
+      <a href="{{ $postLink }}" class="post-card-link"{{ if $isExternal }} target="_blank" rel="noopener"{{ end }}>
+        <img class="card-img-top light-logo" src='{{ partial "helpers/get-hero.html" $page }}' alt="Hero Image">
+        <img class="card-img-top dark-logo" src='{{ partial "helpers/get-hero-dark.html" $page }}' alt="Hero Image">
+      </a>
+    </div>
+    <div class="card-body">
+      <a href="{{ $postLink }}" class="post-card-link"{{ if $isExternal }} target="_blank" rel="noopener"{{ end }}>
+        {{ if $isExternal }}
+          <i class="fa-solid fa-arrow-up-right-from-square" style="margin-right: 5px;"></i>
+        {{ else }}
+          <i class="fa-solid fa-newspaper" style="margin-right: 6px;"></i>
+        {{ end }}
+        <h5 class="card-title" style="display: inline;">{{ $page.Title }}</h5>
+        {{ if $summary }}
+          <p class="card-text post-summary">{{ $summary }}</p>
+        {{ end }}
+      </a>
+      {{ if and $tagsEnabled $tagsOnCard }}
+        {{ partial "misc/tags.html" $page.Params.tags }}
+      {{ end }}
+    </div>
+    <div class="card-footer">
+      <span class="float-start">
+        {{ if $showDate }}
+          {{ $page.Date | time.Format ":date_full" }}
+        {{ end }}
+        {{ if site.Params.features.readingTime }} | {{ $page.ReadingTime }} {{ i18n "minute" $page.ReadingTime }} {{ end }}</span>
+      <a
+        href="{{ $postLink }}"
+        class="float-end btn btn-outline-info btn-sm"{{ if $isExternal }} target="_blank" rel="noopener"{{ end }}>{{ i18n "read" }}</a>
+    </div>
+  </div>
+</div>
