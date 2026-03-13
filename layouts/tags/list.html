@@ -32,6 +32,17 @@
 <section class="content-section" id="content-section">
   <div class="content container-fluid" id="content">
     <div class="container-fluid post-card-holder" id="post-card-holder">
+      {{ $currentTag := .Data.Term }}
+      {{ if $currentTag }}
+        {{ $sections := where site.AllPages "Kind" "section" }}
+        {{ $sections = where $sections "Params.hidden" "!=" true }}
+        {{ range sort $sections "Weight" }}
+          {{ if and .Params.tags (in .Params.tags $currentTag) }}
+            {{ partial "cards/section.html" (dict "section" .) }}
+          {{ end }}
+        {{ end }}
+      {{ end }}
+
       {{ $posts := where .RegularPagesRecursive "Layout" "!=" "search" }}
       {{ $numShow := site.Params.features.pagination.maxPostsPerPage | default 12}}
       {{ $paginator := .Paginate $posts $numShow }}
