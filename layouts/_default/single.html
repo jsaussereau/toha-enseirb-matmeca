@@ -27,10 +27,6 @@
   <section class="sidebar-section" id="sidebar-section">
     <div class="sidebar-holder{{ if $isPost }} in-post{{ end }}">
       <div class="sidebar{{ if $isPost }} in-post{{ end }}" id="sidebar">
-        {{/*  <form class="mx-auto" method="get" action="{{ "search" | relLangURL }}">
-          <input type="text" name="keyword" value="" placeholder="{{ i18n "search" }}" data-search="" id="search-box" />
-        </form>  */}}
-        <div style="margin-bottom: 30px;"></div>
         {{ if and $isPost $navbarCurrentSectionOnly}}
           <div class="sidebar-button-row">
             <div class="sidebar-button">

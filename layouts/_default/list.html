@@ -27,10 +27,6 @@
   <section class="sidebar-section" id="sidebar-section">
     <div class="sidebar-holder">
       <div class="sidebar" id="sidebar">
-        <form class="mx-auto" method="get" action="{{ "search" | relLangURL }}">
-          <input type="text" name="keyword" value="" placeholder="{{ i18n "search" }}" data-search="" id="search-box" />
-        </form>
-
         {{ if $hasGroupedCards }}
           <div class="list-view-mode-wrapper">
             <label for="list-view-mode" class="list-view-mode-label">{{ i18n "list_view_mode" }}</label>

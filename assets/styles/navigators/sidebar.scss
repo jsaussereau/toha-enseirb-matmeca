@@ -23,6 +23,7 @@
     .sidebar {
       background: get-light-color('bg-primary');
       height: 100%;
+	    padding-top: 30px;
       @include transition();
 
       &.in-post {

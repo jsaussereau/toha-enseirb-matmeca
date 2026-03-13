@@ -102,6 +102,21 @@
     </button>
 
     <div class="collapse navbar-collapse dynamic-navbar" id="top-nav-items">
+      {{ if not .IsHome }}
+        <div class="nav-search-wrapper">
+          <form class="top-navbar-search-form" method="get" action="{{ "search" | relLangURL }}">
+            <input
+              type="search"
+              name="keyword"
+              value=""
+              placeholder="{{ i18n "search" }}"
+              data-search=""
+              id="search-box"
+              aria-label="{{ i18n "search" }}"
+            />
+          </form>
+        </div>
+      {{ end }}
       <ul class="nav navbar-nav ms-auto">
         <li class="nav-item">
           <a class="nav-link" href="{{ if .IsHome }}#home{{else}}{{ site.BaseURL | relLangURL }}#home{{end}}">{{ i18n "home" }}</a>
