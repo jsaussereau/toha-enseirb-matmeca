@@ -11,7 +11,7 @@ one = "Enseignement"
 other = "Enseignements"
 
 [all_courses]
-other = "Tous les enseignements"
+other = "Tous les cours"
 
 [toc_heading]
 other = "Table des matières"

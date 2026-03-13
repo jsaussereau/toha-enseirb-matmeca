@@ -88,6 +88,10 @@
       .sidebar-button {
         padding: 0 !important;
         // margin: 5px 5% 5px 5% !important;
+
+        .btn {
+          height: 38px;
+        }
       }
 
       .sidebar-button-row {
@@ -240,7 +244,7 @@
 
     &.expanded {
       flex: 30%;
-      max-width: 30%;
+      max-width: 40%;
       margin-right: 0.5rem;
       @include transition();
     }
