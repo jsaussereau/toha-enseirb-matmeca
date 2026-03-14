@@ -1,0 +1,16 @@
+name: " "
+nickname: " "
+
+greeting: "ENSEIRB-MATMECA"
+
+contactInfo:
+  email: "jsaussereau@bordeaux-inp.fr"
+  # github: "jsaussereau"
+
+summary:
+  - "Électronique"
+  - "Informatique"
+  - "Mathématique & Mécanique"
+  - "Télécommunications"
+  - "Réseaux et Informatique"
+  - "Systèmes Électroniques Embarqués"

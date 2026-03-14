@@ -1,0 +1,11 @@
+# section information
+section:
+  name: Presentation
+  id: about
+  enable: true
+  weight: 1
+  showOnNavbar: false
+  template: sections/about.html
+
+designation: ENSEIRB-MATMECA
+summary: "Ce site contient des ressources pour plusieurs modules des filières [Électronique](https://formation.bordeaux-inp.fr/fr/offre-de-formation-2025-2026/titre-d-ingenieur-DING/ingenieur-specialite-electronique-LUMF0004.html) et [Systèmes Électroniques Embarqués](https://formation.bordeaux-inp.fr/fr/offre-de-formation-2025-2026/titre-d-ingenieur-DING/ingenieur-specialite-systemes-electroniques-embarques-LUMF0008.html) de l'[ENSEIRB-MATMECA](https://enseirb-matmeca.bordeaux-inp.fr/fr)"
