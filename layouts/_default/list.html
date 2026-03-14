@@ -7,6 +7,16 @@
   {{ if hugo.IsMultilingual }}
     {{ $homePage = (path.Join (cond (eq .Language.Lang "en") "" .Language.Lang) .Type) }}
   {{ end }}
+  {{ $isPostList := eq .Type "posts" }}
+  {{ $allSectionsButton  := site.Params.features.blog.allSectionsButton | default (i18n "all_courses") }}
+  {{ $postsRootHref := "posts" | relLangURL }}
+  {{ $normalizedPostsRootHref := printf "%s/" (replaceRE "/+$" "" $postsRootHref) }}
+  {{ $normalizedCurrentHref := printf "%s/" (replaceRE "/+$" "" .RelPermalink) }}
+  {{ $backHref := site.BaseURL | relLangURL }}
+  {{ $showSidebarButtons := and $isPostList (ne $normalizedCurrentHref $normalizedPostsRootHref) }}
+  {{ if ne $normalizedCurrentHref $normalizedPostsRootHref }}
+    {{ $backHref = $postsRootHref }}
+  {{ end }}
 
   {{ $groupByCategoryDefault := site.Params.features.blog.groupByCategory | default true }}
   {{ $hasGroupedCards := false }}
@@ -27,6 +37,28 @@
   <section class="sidebar-section" id="sidebar-section">
     <div class="sidebar-holder">
       <div class="sidebar" id="sidebar">
+        {{ if $showSidebarButtons }}
+          <div class="sidebar-button-row">
+            <div class="sidebar-button">
+              <button
+                class="btn filled-button"
+                type="button"
+                data-href="{{ $backHref }}"
+                onclick="window.location.href=this.dataset.href"
+              >
+                <i class="fa-solid fa-circle-arrow-left" style="margin-right: 5px;"></i>
+                {{ i18n "back" }}
+              </button>
+            </div>
+            <div class="sidebar-button">
+              <button class="btn filled-button" data-href="{{ .Type | relLangURL }}" data-filter="all" onclick="window.location.href=this.dataset.href">
+                <i class="fa-solid fa-circle-arrow-up" style="margin-right: 5px;"></i>
+                {{ $allSectionsButton }}
+              </button>
+            </div>
+          </div>
+        {{ end }}
+
         {{ if $hasGroupedCards }}
           <div class="list-view-mode-wrapper">
             <label for="list-view-mode" class="list-view-mode-label">{{ i18n "list_view_mode" }}</label>
