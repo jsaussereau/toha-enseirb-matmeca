@@ -1,4 +1,5 @@
-{{ range .menuItems }}
+{{ $menuItems := .menuItems | default (slice) }}
+{{ range sort $menuItems "Weight" }}
   {{ $class:= "" }}
   {{ $icon:= "plus-circle" }}
   <!-- If the current menu is the selected menu or it contain the selected menu, set expand icon and set "active" class -->
