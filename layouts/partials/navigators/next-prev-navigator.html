@@ -2,20 +2,12 @@
 {{ $prevPage := "" }}
 {{ $nextPage := "" }}
 {{ $sectionType := .Type }}
+{{ $isPostLike := or (eq $sectionType "posts") (eq $sectionType "tutorials") }}
 {{ $contentFeature := partial "helpers/get-post-like-feature.html" (dict "type" $sectionType) }}
-{{ $menuInfo := partial "helpers/get-sidebar-menu.html" (dict "type" $sectionType) }}
-{{ $menuName := index $menuInfo "menuName" }}
-{{ $menuItems := index $menuInfo "menuItems" }}
+{{ $rootSection := .Site.GetPage (printf "/%s" $sectionType) }}
 
 <!-- Get the parent category/section of the current page -->
-{{ $parent := "" }}
-{{ $menuEntry := "" }}
-{{ if .Params.menu }}
-  {{ $menuEntry = index .Params.menu $menuName }}
-{{ end }}
-{{ if $menuEntry }}
-  {{ $parent = $menuEntry.parent }}
-{{ end }}
+{{ $parentSection := .CurrentSection }}
 
 {{ $nextPrevNavigatorBySection := $contentFeature.nextPrevNavigatorBySection | default true }}
 
@@ -23,27 +15,33 @@
 <!-- List all the pages. It uses the sidebar menu to discover the page order. -->
 {{ $pages := slice }}
 
-{{ if $menuItems }}
-  {{ if $nextPrevNavigatorBySection }}
-    {{ $allPages := partial "helpers/get-pages.html" $menuItems }}
-    <!-- Filter pages to only include those with the same parent -->
-    {{ if $parent }}
-      {{ range $allPages }}
-        {{ $itemMenuEntry := "" }}
-        {{ if .Params.menu }}
-          {{ $itemMenuEntry = index .Params.menu $menuName }}
-        {{ end }}
-        {{ if $itemMenuEntry }}
-          {{ if eq $itemMenuEntry.parent $parent }}
-            {{ $pages = $pages | append . }}
-          {{ end }}
-        {{ end }}
-      {{ end }}
+{{ if and $isPostLike $rootSection }}
+  {{ if and $nextPrevNavigatorBySection $parentSection }}
+    {{ $normalizedRoot := printf "%s/" (replaceRE "/+$" "" $rootSection.RelPermalink) }}
+    {{ $normalizedParent := printf "%s/" (replaceRE "/+$" "" $parentSection.RelPermalink) }}
+    {{ if ne $normalizedParent $normalizedRoot }}
+      {{ $pages = where $parentSection.RegularPagesRecursive "Layout" "!=" "search" }}
+      {{ $pages = where $pages "Params.hidden" "!=" true }}
+      {{ $pages = sort $pages "Weight" }}
     {{ else }}
-      {{ $pages = $allPages }}
+      {{ $pages = where $rootSection.RegularPagesRecursive "Layout" "!=" "search" }}
+      {{ $pages = where $pages "Params.hidden" "!=" true }}
+      {{ $pages = sort $pages "Weight" }}
     {{ end }}
   {{ else }}
-    {{ $pages = partial "helpers/get-pages.html" $menuItems }}
+    {{ $pages = where $rootSection.RegularPagesRecursive "Layout" "!=" "search" }}
+    {{ $pages = where $pages "Params.hidden" "!=" true }}
+    {{ $pages = sort $pages "Weight" }}
+  {{ end }}
+{{ else }}
+  <!-- fallback for non post-like pages -->
+  {{ if isset site.Menus "sidebar" }}
+    {{ if $nextPrevNavigatorBySection }}
+      {{ $allPages := partial "helpers/get-pages.html" site.Menus.sidebar }}
+      {{ $pages = $allPages }}
+    {{ else }}
+      {{ $pages = partial "helpers/get-pages.html" site.Menus.sidebar }}
+    {{ end }}
   {{ end }}
 {{ end }}
 

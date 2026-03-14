@@ -1,0 +1,17 @@
+{{- $items := slice -}}
+
+{{- $sections := where .Sections "Params.hidden" "!=" true -}}
+{{- $sections = sort $sections "Weight" -}}
+{{- range $sections -}}
+  {{- $items = $items | append . -}}
+{{- end -}}
+
+{{- $pages := where .RegularPages "Layout" "!=" "search" -}}
+{{- $pages = where $pages "Params.hidden" "!=" true -}}
+{{- $pages = sort $pages "Weight" -}}
+{{- range $pages -}}
+  {{- $items = $items | append . -}}
+{{- end -}}
+
+{{- $items = sort $items "Weight" -}}
+{{- return $items -}}

@@ -14,28 +14,28 @@
   {{ $defaultListHeadingText := cond (eq $sectionType "tutorials") (i18n "tutorials") (i18n "courses") }}
   {{ $allSectionsButton  := $contentFeature.allSectionsButton | default $defaultAllSectionsButton }}
   {{ $navbarCurrentSectionOnly := $contentFeature.navbarCurrentSectionOnly | default true }}
-  {{ $menuInfo := partial "helpers/get-sidebar-menu.html" (dict "type" $sectionType) }}
-  {{ $menuName := index $menuInfo "menuName" }}
-  {{ $menuItems := index $menuInfo "menuItems" }}
-  {{ $listRootHref := index $menuInfo "rootHref" }}
+  {{ $rootSection := .Site.GetPage (printf "/%s" $sectionType) }}
+  {{ $listRootHref := $sectionType | relLangURL }}
+  {{ if and $isPostLike $rootSection }}
+    {{ $listRootHref = $rootSection.RelPermalink }}
+  {{ end }}
   {{ $listHeadingText := $contentFeature.title | default $defaultListHeadingText }}
-  {{ $parentId := "" }}
-  {{ $menuEntry := "" }}
-  {{ if .Params.menu }}
-    {{ $menuEntry = index .Params.menu $menuName }}
-  {{ end }}
-  {{ if $menuEntry }}
-    {{ $parentId = $menuEntry.parent }}
-  {{ end }}
-  {{ $parentMenu := "" }}
-  {{ if $parentId }}
-    {{ $scratch := newScratch }}
-    {{ partial "helpers/find-menu-item-by-id.html" (dict "menuItems" $menuItems "targetId" $parentId "scratch" $scratch) }}
-    {{ $parentMenu = $scratch.Get "menuItem" }}
+  {{ $currentSection := .CurrentSection }}
+  {{ $showCurrentSectionOnly := false }}
+  {{ if and $isPostLike $navbarCurrentSectionOnly $rootSection $currentSection }}
+    {{ $normalizedRoot := printf "%s/" (replaceRE "/+$" "" $rootSection.RelPermalink) }}
+    {{ $normalizedCurrentSection := printf "%s/" (replaceRE "/+$" "" $currentSection.RelPermalink) }}
+    {{ $showCurrentSectionOnly = ne $normalizedCurrentSection $normalizedRoot }}
   {{ end }}
   {{ $backHref := $listRootHref }}
-  {{ if $parentMenu }}
-    {{ $backHref = $parentMenu.URL | relLangURL }}
+  {{ if and $showCurrentSectionOnly $currentSection }}
+    {{ $backHref = $currentSection.RelPermalink }}
+  {{ end }}
+  {{ $treeItems := slice }}
+  {{ if and $showCurrentSectionOnly $currentSection }}
+    {{ $treeItems = partial "helpers/get-section-nav-items.html" $currentSection }}
+  {{ else if $rootSection }}
+    {{ $treeItems = partial "helpers/get-section-nav-items.html" $rootSection }}
   {{ end }}
   <section class="sidebar-section" id="sidebar-section">
     <div class="sidebar-holder{{ if $isPostLike }} in-post{{ end }}">
@@ -63,30 +63,19 @@
         {{ end }}
         <div class="sidebar-tree section-sidebar-tree">
           <ul class="tree" id="tree">
-            {{ if and $isPostLike $navbarCurrentSectionOnly}}
-              {{ if $parentId }}
-                {{ $currentPage := . }}
-                {{ if $parentMenu }}
-                    <li id="list-heading"><a href="{{ $parentMenu.URL | relLangURL }}">{{ $parentMenu.Name }}</a></li>
-                    <div class="subtree section-subtree">
-                      {{ partial "navigators/sidebar.html" (dict "menuName" $menuName "menuItems" $parentMenu.Children "ctx" $currentPage) }}
-                    </div>
-                {{ else }}
-                  <li id="list-heading"><a href="{{ $listRootHref }}" data-filter="all">{{ $listHeadingText }}</a></li>
-                  <div class="subtree">
-                    {{ partial "navigators/sidebar.html" (dict "menuName" $menuName "menuItems" $menuItems "ctx" .) }}
-                  </div>
-                {{ end }}
-              {{ else }}
-                <li id="list-heading"><a href="{{ $listRootHref }}" data-filter="all">{{ $listHeadingText }}</a></li>
-                <div class="subtree">
-                  {{ partial "navigators/sidebar.html" (dict "menuName" $menuName "menuItems" $menuItems "ctx" .) }}
-                </div>
-              {{ end }}
+            {{ if and $isPostLike $showCurrentSectionOnly $currentSection }}
+              <li id="list-heading"><a href="{{ $currentSection.RelPermalink }}">{{ $currentSection.Title }}</a></li>
+              <div class="subtree section-subtree">
+                {{ partial "navigators/sidebar-sections.html" (dict "items" $treeItems "ctx" .) }}
+              </div>
             {{ else }}
               <li id="list-heading"><a href="{{ $listRootHref }}" data-filter="all">{{ $listHeadingText }}</a></li>
               <div class="subtree">
-                {{ partial "navigators/sidebar.html" (dict "menuName" $menuName "menuItems" $menuItems "ctx" .) }}
+                {{ if $isPostLike }}
+                  {{ partial "navigators/sidebar-sections.html" (dict "items" $treeItems "ctx" .) }}
+                {{ else }}
+                  {{ partial "navigators/sidebar.html" (dict "menuName" "sidebar" "menuItems" site.Menus.sidebar "ctx" .) }}
+                {{ end }}
               </div>
             {{ end }}
           </ul>

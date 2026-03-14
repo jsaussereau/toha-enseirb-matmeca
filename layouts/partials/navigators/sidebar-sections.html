@@ -1,0 +1,26 @@
+{{ range .items }}
+  {{ $class:= "" }}
+  {{ $icon:= "plus-circle" }}
+  {{ $ctxUrl := printf "%s/" (replaceRE "/+$" "" $.ctx.RelPermalink) }}
+  {{ $itemUrl := printf "%s/" (replaceRE "/+$" "" .RelPermalink) }}
+  {{ $isCurrent := eq $ctxUrl $itemUrl }}
+  {{ $isAncestor := and (not $isCurrent) (hasPrefix $ctxUrl $itemUrl) }}
+  {{ if or $isCurrent $isAncestor }}
+    {{ $icon = "minus-circle" }}
+    {{ $class = "active" }}
+  {{ end }}
+
+  {{ if .IsSection }}
+    {{ $children := partial "helpers/get-section-nav-items.html" . }}
+    <li>
+      {{ if gt (len $children) 0 }}<i data-feather="{{ $icon }}"></i>{{ end }}<a class="{{$class}} list-link" href="{{ .RelPermalink }}"> {{ .LinkTitle }}</a>
+      {{ if gt (len $children) 0 }}
+        <ul class="{{ $class }}">
+          {{ partial "navigators/sidebar-sections.html" (dict "items" $children "ctx" $.ctx) }}
+        </ul>
+      {{ end }}
+    </li>
+  {{ else }}
+    <li><a class="{{$class}} list-link" href="{{ .RelPermalink }}" title="{{ .LinkTitle }}">{{ .LinkTitle }}</a></li>
+  {{ end }}
+{{ end }}

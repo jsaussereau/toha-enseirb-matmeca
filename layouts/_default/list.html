@@ -17,7 +17,15 @@
   {{ $menuInfo := partial "helpers/get-sidebar-menu.html" (dict "type" $sectionType) }}
   {{ $menuName := index $menuInfo "menuName" }}
   {{ $menuItems := index $menuInfo "menuItems" }}
-  {{ $listRootHref := index $menuInfo "rootHref" }}
+  {{ $rootSection := .Site.GetPage (printf "/%s" $sectionType) }}
+  {{ $listRootHref := $sectionType | relLangURL }}
+  {{ if and $isPostLikeList $rootSection }}
+    {{ $listRootHref = $rootSection.RelPermalink }}
+  {{ end }}
+  {{ $sectionNavItems := slice }}
+  {{ if and $isPostLikeList $rootSection }}
+    {{ $sectionNavItems = partial "helpers/get-section-nav-items.html" $rootSection }}
+  {{ end }}
   {{ $normalizedPostsRootHref := printf "%s/" (replaceRE "/+$" "" $listRootHref) }}
   {{ $normalizedCurrentHref := printf "%s/" (replaceRE "/+$" "" .RelPermalink) }}
   {{ $backHref := site.BaseURL | relLangURL }}
@@ -86,7 +94,11 @@
             {{ $listHeadingText := $contentFeature.title | default $defaultListHeadingText }}
             <li id="list-heading"><a href="{{ $listRootHref }}" data-filter="all">{{ $listHeadingText }}</a></li>
             <div class="subtree">
-              {{ partial "navigators/sidebar.html" (dict "menuName" $menuName "menuItems" $menuItems "ctx" .) }}
+              {{ if $isPostLikeList }}
+                {{ partial "navigators/sidebar-sections.html" (dict "items" $sectionNavItems "ctx" .) }}
+              {{ else }}
+                {{ partial "navigators/sidebar.html" (dict "menuName" $menuName "menuItems" $menuItems "ctx" .) }}
+              {{ end }}
             </div>
           </ul>
         </div>
