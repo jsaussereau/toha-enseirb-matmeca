@@ -91,6 +91,8 @@
   }
 
   @include media('<=small') {
+    height: 65vh;
+    
     .content {
       position: relative;
       top: -65%;
