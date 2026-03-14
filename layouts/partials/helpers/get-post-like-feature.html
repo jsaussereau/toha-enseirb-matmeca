@@ -1,0 +1,14 @@
+{{- $sectionType := .type -}}
+{{- $feature := site.Params.features.blog -}}
+{{- if not $feature -}}
+  {{- $feature = dict -}}
+{{- end -}}
+
+{{- if and (ne $sectionType "posts") site.Params.features -}}
+  {{- $override := index site.Params.features $sectionType -}}
+  {{- if $override -}}
+    {{- $feature = merge $feature $override -}}
+  {{- end -}}
+{{- end -}}
+
+{{- return $feature -}}

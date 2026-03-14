@@ -13,6 +13,13 @@ other = "Courses"
 [all_courses]
 other = "All Courses"
 
+[tutorials]
+one = "Tutorial"
+other = "Tutorials"
+
+[all_tutorials]
+other = "All Tutorials"
+
 [toc_heading]
 other = "Table of Contents"
 

@@ -1,0 +1,17 @@
+{{- $sectionType := .type -}}
+{{- $menuName := $sectionType -}}
+{{- if eq $sectionType "posts" -}}
+  {{- $menuName = "sidebar" -}}
+{{- end -}}
+
+{{- $menuItems := index site.Menus $menuName -}}
+{{- if not $menuItems -}}
+  {{- $menuName = "sidebar" -}}
+  {{- $menuItems = site.Menus.sidebar -}}
+{{- end -}}
+
+{{- return (dict
+  "menuName" $menuName
+  "menuItems" $menuItems
+  "rootHref" ($sectionType | relLangURL)
+) -}}

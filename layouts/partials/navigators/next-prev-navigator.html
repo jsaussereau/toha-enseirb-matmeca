@@ -1,27 +1,40 @@
 {{ $curPage := . }}
 {{ $prevPage := "" }}
 {{ $nextPage := "" }}
+{{ $sectionType := .Type }}
+{{ $contentFeature := partial "helpers/get-post-like-feature.html" (dict "type" $sectionType) }}
+{{ $menuInfo := partial "helpers/get-sidebar-menu.html" (dict "type" $sectionType) }}
+{{ $menuName := index $menuInfo "menuName" }}
+{{ $menuItems := index $menuInfo "menuItems" }}
 
 <!-- Get the parent category/section of the current page -->
 {{ $parent := "" }}
-{{ if isset .Params.menu "sidebar" }}
-  {{ $parent = .Params.menu.sidebar.parent }}
+{{ $menuEntry := "" }}
+{{ if .Params.menu }}
+  {{ $menuEntry = index .Params.menu $menuName }}
+{{ end }}
+{{ if $menuEntry }}
+  {{ $parent = $menuEntry.parent }}
 {{ end }}
 
-{{ $nextPrevNavigatorBySection := site.Params.features.blog.nextPrevNavigatorBySection | default true }}
+{{ $nextPrevNavigatorBySection := $contentFeature.nextPrevNavigatorBySection | default true }}
 
 
 <!-- List all the pages. It uses the sidebar menu to discover the page order. -->
 {{ $pages := slice }}
 
-{{ if isset site.Menus "sidebar" }}
+{{ if $menuItems }}
   {{ if $nextPrevNavigatorBySection }}
-    {{ $allPages := partial "helpers/get-pages.html" site.Menus.sidebar }}
+    {{ $allPages := partial "helpers/get-pages.html" $menuItems }}
     <!-- Filter pages to only include those with the same parent -->
     {{ if $parent }}
       {{ range $allPages }}
-        {{ if isset .Params.menu "sidebar" }}
-          {{ if eq .Params.menu.sidebar.parent $parent }}
+        {{ $itemMenuEntry := "" }}
+        {{ if .Params.menu }}
+          {{ $itemMenuEntry = index .Params.menu $menuName }}
+        {{ end }}
+        {{ if $itemMenuEntry }}
+          {{ if eq $itemMenuEntry.parent $parent }}
             {{ $pages = $pages | append . }}
           {{ end }}
         {{ end }}
@@ -30,7 +43,7 @@
       {{ $pages = $allPages }}
     {{ end }}
   {{ else }}
-    {{ $pages = partial "helpers/get-pages.html" site.Menus.sidebar }}
+    {{ $pages = partial "helpers/get-pages.html" $menuItems }}
   {{ end }}
 {{ end }}
 

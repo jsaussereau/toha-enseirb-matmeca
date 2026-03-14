@@ -7,18 +7,26 @@
   {{ if hugo.IsMultilingual }}
     {{ $homePage = (path.Join (cond (eq .Language.Lang "en") "" .Language.Lang) .Type) }}
   {{ end }}
-  {{ $isPostList := eq .Type "posts" }}
-  {{ $allSectionsButton  := site.Params.features.blog.allSectionsButton | default (i18n "all_courses") }}
-  {{ $postsRootHref := "posts" | relLangURL }}
-  {{ $normalizedPostsRootHref := printf "%s/" (replaceRE "/+$" "" $postsRootHref) }}
+  {{ $sectionType := .Type }}
+  {{ $isPostLikeList := or (eq $sectionType "posts") (eq $sectionType "tutorials") }}
+  {{ $contentFeature := partial "helpers/get-post-like-feature.html" (dict "type" $sectionType) }}
+  {{ $defaultAllSectionsButton := cond (eq $sectionType "tutorials") (i18n "all_tutorials") (i18n "all_courses") }}
+  {{ $defaultListHeadingText := cond (eq $sectionType "tutorials") (i18n "tutorials") (i18n "courses") }}
+  {{ $allSectionsButton  := $contentFeature.allSectionsButton | default $defaultAllSectionsButton }}
+  {{ $navbarCurrentSectionOnly := $contentFeature.navbarCurrentSectionOnly | default true }}
+  {{ $menuInfo := partial "helpers/get-sidebar-menu.html" (dict "type" $sectionType) }}
+  {{ $menuName := index $menuInfo "menuName" }}
+  {{ $menuItems := index $menuInfo "menuItems" }}
+  {{ $listRootHref := index $menuInfo "rootHref" }}
+  {{ $normalizedPostsRootHref := printf "%s/" (replaceRE "/+$" "" $listRootHref) }}
   {{ $normalizedCurrentHref := printf "%s/" (replaceRE "/+$" "" .RelPermalink) }}
   {{ $backHref := site.BaseURL | relLangURL }}
-  {{ $showSidebarButtons := and $isPostList (ne $normalizedCurrentHref $normalizedPostsRootHref) }}
+  {{ $showSidebarButtons := and $isPostLikeList $navbarCurrentSectionOnly (ne $normalizedCurrentHref $normalizedPostsRootHref) }}
   {{ if ne $normalizedCurrentHref $normalizedPostsRootHref }}
-    {{ $backHref = $postsRootHref }}
+    {{ $backHref = $listRootHref }}
   {{ end }}
 
-  {{ $groupByCategoryDefault := site.Params.features.blog.groupByCategory | default true }}
+  {{ $groupByCategoryDefault := $contentFeature.groupByCategory | default true }}
   {{ $hasGroupedCards := false }}
   {{ $sections := sort .Sections "Weight" }}
   {{ range $sections }}
@@ -51,7 +59,7 @@
               </button>
             </div>
             <div class="sidebar-button">
-              <button class="btn filled-button" data-href="{{ .Type | relLangURL }}" data-filter="all" onclick="window.location.href=this.dataset.href">
+              <button class="btn filled-button" data-href="{{ $listRootHref }}" data-filter="all" onclick="window.location.href=this.dataset.href">
                 <i class="fa-solid fa-circle-arrow-up" style="margin-right: 5px;"></i>
                 {{ $allSectionsButton }}
               </button>
@@ -75,10 +83,10 @@
 
         <div class="sidebar-tree">
           <ul class="tree" id="tree">
-            {{ $listHeadingText := site.Params.features.blog.title | default (i18n "courses") }}
-            <li id="list-heading"><a href="{{ .Type | relLangURL }}" data-filter="all">{{ $listHeadingText }}</a></li>
+            {{ $listHeadingText := $contentFeature.title | default $defaultListHeadingText }}
+            <li id="list-heading"><a href="{{ $listRootHref }}" data-filter="all">{{ $listHeadingText }}</a></li>
             <div class="subtree">
-              {{ partial "navigators/sidebar.html" (dict "menuName" "sidebar" "menuItems" site.Menus.sidebar "ctx" .) }}
+              {{ partial "navigators/sidebar.html" (dict "menuName" $menuName "menuItems" $menuItems "ctx" .) }}
             </div>
           </ul>
         </div>
@@ -90,7 +98,8 @@
 {{ define "content" }}
 <section class="content-section" id="content-section">
   <div class="content container-fluid" id="content">
-    {{ $groupByCategoryDefault := site.Params.features.blog.groupByCategory | default true }}
+    {{ $contentFeature := partial "helpers/get-post-like-feature.html" (dict "type" .Type) }}
+    {{ $groupByCategoryDefault := $contentFeature.groupByCategory | default true }}
 
     {{ $sectionCards := slice }}
     {{ $directPosts := where .RegularPages "Layout" "!=" "search" }}
