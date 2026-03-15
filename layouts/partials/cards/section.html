@@ -18,6 +18,9 @@
     <div class="card-body">
       <a class="text-decoration-none" href="{{ $section.RelPermalink }}">
         <h5 class="card-title mb-2"><i class="fa-solid fa-folder-open" style="margin-right: 6px;"></i>{{ $section.Title }}</h5>
+        {{ if $section.Params.subtitle }}
+            <h5>{{ $section.Params.subtitle }}</h5>
+        {{ end }}   
         {{ if $summary }}
           <p class="card-text text-muted">{{ $summary }}</p>
         {{ end }}
