@@ -1,0 +1,29 @@
+<div class="col-xs-12 col-sm-6 col-lg-4 pt-2 filtr-item"
+  data-category='all, {{ with .categories }}{{ delimit . ","}}{{ end }}'
+>
+  <a class="text-decoration-none shortcut-link" {{ if .url }}href="{{ .url }}" title="{{ .name }}" target="_blank" rel="noopener"{{ end }}>
+    <div class="card">
+      <div class="card-head">
+        <div class="shortcut-icon-ring">
+          {{ if .logo }}
+            {{ $logoImage := resources.Get .logo }}
+            {{/* svg don't support "Fit" operation */}}
+            {{ if ne $logoImage.MediaType.SubType "svg" }}
+              {{ $logoImage = $logoImage.Fit "42x42" }}
+            {{ end }}
+            <img class="card-img-xs" src="{{ $logoImage.RelPermalink }}" alt="{{ .name }}" />
+          {{ else if .icon }}
+            {{ $iconName := .icon }}
+            <i class="shortcut-icon {{ $iconName }}" aria-hidden="true"></i>
+          {{ else }}
+            <span class="shortcut-fallback-icon">{{ substr .name 0 1 }}</span>
+          {{ end }}
+        </div>
+        <h5 class="card-title">{{ .name }}</h5>
+      </div>
+      <div class="card-body text-justify pt-1 pb-1">
+        <p class="card-text">{{ .summary | markdownify }}</p>
+      </div>
+    </div>
+  </a>
+</div>

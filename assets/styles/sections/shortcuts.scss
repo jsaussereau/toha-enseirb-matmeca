@@ -1,0 +1,123 @@
+.shortcuts-section {
+  .shortcut-link {
+    display: block;
+    height: 100%;
+  }
+
+  .card {
+    margin-top: 2.4rem;
+    margin-bottom: 0.5rem;
+    min-height: 11rem;
+    overflow: visible;
+    box-shadow: $box-shadow;
+    border: 1px solid rgba(get-light-color('accent-color'), 0.12);
+    @include transition();
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(get-light-color('accent-color'), 0.2);
+    }
+
+    .card-head {
+      background-color: get-light-color('bg-primary') !important;
+      height: -moz-fit-content;
+      height: fit-content;
+      text-align: center;
+      justify-content: center;
+      position: relative;
+      padding: 3.3rem 0.9rem 0.85rem;
+      border-bottom: 0.0625rem solid rgba(get-light-color('accent-color'), 0.4);
+      overflow: visible;
+
+      .shortcut-icon-ring {
+        position: absolute;
+        left: 50%;
+        top: 0;
+        transform: translate(-50%, -50%);
+        width: 5.2rem;
+        height: 5.2rem;
+        border-radius: 50%;
+        background-color: get-light-color('bg-primary');
+        border: 0.2rem solid get-light-color('accent-color');
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 8px 18px rgba(get-light-color('accent-color'), 0.22), inset 0 0 20px rgba(get-light-color('accent-color'), 0.22)
+      }
+
+      .card-img-xs {
+        width: 2.6rem;
+        height: 2.6rem;
+        object-fit: contain;
+        filter: drop-shadow(0 2px 5px rgba(40, 54, 87, 0.25))
+      }
+
+      .shortcut-icon,
+      .shortcut-fallback-icon {
+        font-size: 2.1rem;
+        color: get-light-color('accent-color');
+        line-height: 1;
+        text-shadow: 0 2px 6px rgba(get-light-color('accent-color'), 0.35);
+      }
+
+      .shortcut-fallback-icon {
+        font-weight: 700;
+      }
+
+      .card-title {
+        margin-bottom: 0;
+        font-size: 1.15rem;
+      }
+    }
+
+    .card-body {
+      padding: 0.8rem 1rem 1.05rem;
+
+      .card-text {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  @include media('<=medium') {
+    padding-left: 0;
+    padding-right: 0;
+
+    .container {
+      max-width: 95%;
+    }
+  }
+}
+
+html[data-theme='dark'] {
+  .shortcuts-section {
+    .card {
+      border-color: rgba(get-dark-color('accent-color'), 0.2);
+
+      &:hover {
+        box-shadow: 0 8px 20px rgba(get-dark-color('accent-color'), 0.28);
+      }
+
+      .card-head {
+        background-color: get-dark-color('bg-card') !important;
+        border-bottom: 0.0625rem solid rgba(get-dark-color('accent-color'), 0.4);
+
+        .shortcut-icon-ring {
+          background-color: get-dark-color('bg-card');
+          border-color: get-dark-color('accent-color');
+          box-shadow: 0 8px 18px rgba(get-dark-color('accent-color'), 0.28);
+        }
+
+        .shortcut-icon,
+        .shortcut-fallback-icon {
+          color: get-dark-color('accent-color');
+          text-shadow: 0 2px 7px rgba(get-dark-color('accent-color'), 0.45);
+        }
+
+        .card-img-xs {
+          filter: drop-shadow(0 2px 6px rgba(get-dark-color('accent-color'), 0.45));
+        }
+      }
+    }
+  }
+}
