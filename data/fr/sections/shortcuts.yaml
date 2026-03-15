@@ -1,0 +1,25 @@
+# section information
+section:
+  name: Contenu
+  id: shortcuts
+  enable: true
+  weight: 2
+  showOnNavbar: false
+  filter: false
+  hideTitle: true
+
+shortcuts:
+- name: Enseignements
+  logo: /icons/mortarboard.png
+  summary: "Supports de Cours, TD et TP pour différents modules d'enseignement de l'ENSEIRB-MATMECA."
+  url: "/fr/posts"
+
+- name: Tutoriels
+  logo: /icons/book.png
+  summary: "Tutoriels génériques qui ne sont directement liés à un module d'enseignement."
+  url: "/fr/tutorials/"
+
+- name: Snippets
+  logo: /icons/snippet.png
+  summary: "Extraits de code réutilisables pour différents projets ou besoins."
+  url: "/fr/notes/"
