@@ -158,3 +158,6 @@ other = "All posts"
 
 [figure]
 other = "Figure"
+
+[open]
+other = "Open"

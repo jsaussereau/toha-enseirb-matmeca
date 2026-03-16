@@ -39,7 +39,7 @@
         {{ if site.Params.features.readingTime }} | {{ $page.ReadingTime }} {{ i18n "minute" $page.ReadingTime }} {{ end }}</span>
       <a
         href="{{ $postLink }}"
-        class="float-end btn btn-outline-info btn-sm"{{ if $isExternal }} target="_blank" rel="noopener"{{ end }}>{{ i18n "read" }}</a>
+        class="float-end btn btn-outline-info btn-sm"{{ if $isExternal }} target="_blank" rel="noopener"{{ end }}>{{ if $isExternal }}{{ i18n "open" }}{{ else }}{{ i18n "read" }}{{ end }}</a>
     </div>
   </div>
 </div>

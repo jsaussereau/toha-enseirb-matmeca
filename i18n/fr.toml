@@ -158,3 +158,6 @@ other = "Tous les articles"
 
 [figure]
 other = "Figure"
+
+[open]
+other = "Ouvrir"
