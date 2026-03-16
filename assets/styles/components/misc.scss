@@ -124,9 +124,11 @@ details[open] > summary.admonition-header::before {
 .shortcode-figure {
   margin: 1.5rem auto;
   text-align: center;
+  width: 100%;
 
   .shortcode-figure-content {
-    display: inline-block;
+    display: block;
+    width: 100%;
     max-width: 100%;
   }
 
