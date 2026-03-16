@@ -19,7 +19,15 @@
   {{ else }}
     <!-- Leaf node. Add menu entry only if page is not marked as hidden -->
     {{ if not .Page.Params.hidden }}
-    <li><a class="{{$class}} list-link" href="{{ .PageRef | default .URL }}" title="{{ .Name }}">{{.Name}}</a></li>
+      {{ $href := .PageRef | default .URL }}
+      {{ $isExternal := false }}
+      {{ with .Page }}
+        {{ with .Params.externalLink }}
+          {{ $href = . }}
+          {{ $isExternal = true }}
+        {{ end }}
+      {{ end }}
+    <li><a class="{{$class}} list-link" href="{{ $href }}" title="{{ .Name }}"{{ if $isExternal }} target="_blank" rel="noopener"{{ end }}>{{.Name}}</a></li>
     {{ end }}
   {{ end }}
 {{ end }}

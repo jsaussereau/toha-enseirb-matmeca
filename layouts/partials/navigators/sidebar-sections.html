@@ -21,6 +21,8 @@
       {{ end }}
     </li>
   {{ else }}
-    <li><a class="{{$class}} list-link" href="{{ .RelPermalink }}" title="{{ .LinkTitle }}">{{ .LinkTitle }}</a></li>
+    {{ $href := partial "helpers/get-post-link.html" . }}
+    {{ $isExternal := .Params.externalLink }}
+    <li><a class="{{$class}} list-link" href="{{ $href }}" title="{{ .LinkTitle }}"{{ if $isExternal }} target="_blank" rel="noopener"{{ end }}>{{ .LinkTitle }}</a></li>
   {{ end }}
 {{ end }}

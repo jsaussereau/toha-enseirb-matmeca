@@ -45,6 +45,15 @@
   {{ end }}
 {{ end }}
 
+<!-- Remove non-navigable pages such as external links -->
+{{ $navigablePages := slice }}
+{{ range $pages }}
+  {{ if not .Params.externalLink }}
+    {{ $navigablePages = $navigablePages | append . }}
+  {{ end }}
+{{ end }}
+{{ $pages = $navigablePages }}
+
 <!-- Now, find the current page index in the pages list. Then, find previous page and next page. -->
 {{ $idx := 0 }}
 {{ range $pages }}
