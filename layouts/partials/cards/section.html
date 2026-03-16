@@ -6,6 +6,15 @@
 {{- $sectionPosts := where $section.RegularPagesRecursive "Layout" "!=" "search" -}}
 {{- $sectionPosts = where $sectionPosts "Params.hidden" "!=" true -}}
 {{- $postCount := len $sectionPosts -}}
+{{- $sectionPath := $section.Ancestors.Reverse | append $section -}}
+{{- $rootHref := printf "%s/" (replaceRE "/+$" "" ($section.Type | relLangURL)) -}}
+{{- $showSubsectionFooter := false -}}
+{{- with $section.Parent -}}
+  {{- $parentHref := printf "%s/" (replaceRE "/+$" "" .RelPermalink) -}}
+  {{- if ne $parentHref $rootHref -}}
+    {{- $showSubsectionFooter = true -}}
+  {{- end -}}
+{{- end -}}
 
 <div class="post-card" {{ $widthAttr | safeHTMLAttr }}>
   <div class="card h-100 shadow-sm">
@@ -27,8 +36,38 @@
         {{ if and $tagsEnabled $tagsOnCard }}
           {{ partial "misc/tags.html" $section.Params.tags }}
         {{ end }}
-        <p class="card-text text-muted">{{ $postCount }} {{ i18n "posts" $postCount }}</p>
-      </a>
+        {{ if $showSubsectionFooter }}
+            <p class="card-text text-muted" style="margin-top: -1.5em; margin-bottom: 1em;">{{ $postCount }} {{ i18n "posts" $postCount }}</p>
+        {{ else }}
+            <p class="card-text text-muted" style="margin-top: -0.5em; margin-bottom: 0.5em;">{{ $postCount }} {{ i18n "posts" $postCount }}</p>
+        {{ end }}
+        </a>
     </div>
+    {{ if $showSubsectionFooter }}
+      <div class="card-footer">
+        <span class="float-start">
+          {{- $breadcrumbNodes := slice -}}
+          {{- range $sectionPath -}}
+            {{- $nodeHref := printf "%s/" (replaceRE "/+$" "" .RelPermalink) -}}
+            {{- if ne $nodeHref $rootHref -}}
+              {{- $breadcrumbNodes = $breadcrumbNodes | append . -}}
+            {{- end -}}
+          {{- end -}}
+          {{- $hasPrev := false -}}
+          {{- $lastIdx := sub (len $breadcrumbNodes) 1 -}}
+          {{- range $idx, $node := $breadcrumbNodes -}}
+            {{- if and (gt $idx 0) (lt $idx $lastIdx) -}}
+              {{- if $hasPrev }} &gt; {{ end -}}
+              <a href="{{ $node.RelPermalink }}" class="text-muted">{{ $node.LinkTitle }}</a>
+              {{- $hasPrev = true -}}
+            {{- end -}}
+          {{- end -}}
+        </span>
+        {{/*  <span class="float-end text-muted">{{ $postCount }} {{ i18n "posts" $postCount }}</span>  */}}
+        <a
+            href="{{ $section.RelPermalink }}"
+            class="float-end btn btn-outline-info btn-sm">{{ i18n "open" }}</a>
+        </div>
+    {{ end }}
   </div>
 </div>

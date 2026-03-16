@@ -6,6 +6,11 @@
 {{- $summary := default ($page.Summary | plainify) .summary -}}
 {{- $postLink := partial "helpers/get-post-link.html" $page -}}
 {{- $isExternal := $page.Params.externalLink -}}
+{{- $sectionPath := slice -}}
+{{- with $page.CurrentSection -}}
+  {{- $sectionPath = .Ancestors.Reverse | append . -}}
+{{- end -}}
+{{- $rootHref := printf "%s/" (replaceRE "/+$" "" ($page.Type | relLangURL)) -}}
 
 <div class="post-card" {{ $widthAttr | safeHTMLAttr }}>
   <div class="card">
@@ -33,10 +38,23 @@
     </div>
     <div class="card-footer">
       <span class="float-start">
-        {{ if $showDate }}
-          {{ $page.Date | time.Format ":date_full" }}
+        {{ if gt (len $sectionPath) 0 }}
+          {{- $hasPrev := false -}}
+          {{- $skipFirst := true -}}
+          {{- range $sectionPath -}}
+            {{- $nodeHref := printf "%s/" (replaceRE "/+$" "" .RelPermalink) -}}
+            {{- if ne $nodeHref $rootHref -}}
+              {{- if $skipFirst -}}
+                {{- $skipFirst = false -}}
+              {{- else -}}
+                {{- if $hasPrev }} &gt; {{ end -}}
+                <a href="{{ .RelPermalink }}" class="text-muted">{{ .LinkTitle }}</a>
+                {{- $hasPrev = true -}}
+              {{- end -}}
+            {{- end -}}
+          {{- end -}}
         {{ end }}
-        {{ if site.Params.features.readingTime }} | {{ $page.ReadingTime }} {{ i18n "minute" $page.ReadingTime }} {{ end }}</span>
+        {{ if site.Params.features.readingTime }}{{ if gt (len $sectionPath) 0 }} | {{ end }}{{ $page.ReadingTime }} {{ i18n "minute" $page.ReadingTime }} {{ end }}</span>
       <a
         href="{{ $postLink }}"
         class="float-end btn btn-outline-info btn-sm"{{ if $isExternal }} target="_blank" rel="noopener"{{ end }}>{{ if $isExternal }}{{ i18n "open" }}{{ else }}{{ i18n "read" }}{{ end }}</a>
