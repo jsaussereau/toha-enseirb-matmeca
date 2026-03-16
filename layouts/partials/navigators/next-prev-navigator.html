@@ -35,12 +35,12 @@
   {{ end }}
 {{ else }}
   <!-- fallback for non post-like pages -->
-  {{ if isset site.Menus "sidebar" }}
+  {{ with site.Menus.sidebar }}
     {{ if $nextPrevNavigatorBySection }}
-      {{ $allPages := partial "helpers/get-pages.html" site.Menus.sidebar }}
+      {{ $allPages := partial "helpers/get-pages.html" . }}
       {{ $pages = $allPages }}
     {{ else }}
-      {{ $pages = partial "helpers/get-pages.html" site.Menus.sidebar }}
+      {{ $pages = partial "helpers/get-pages.html" . }}
     {{ end }}
   {{ end }}
 {{ end }}
