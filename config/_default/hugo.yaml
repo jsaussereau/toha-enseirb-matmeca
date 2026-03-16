@@ -55,3 +55,11 @@ params:
             - left: \\\(
               right: \\\)
               display: false
+
+    flowchart:
+      enable: true
+      services:
+        mermaid:
+          # Optionnel: thème clair/sombre des diagrammes
+          theme: default
+          darkTheme: dark
