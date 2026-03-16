@@ -1,0 +1,53 @@
+{{- $caption := "" -}}
+{{- if .IsNamedParams -}}
+  {{- $caption = default (.Get "title") (.Get "caption") -}}
+{{- else if ge (len .Params) 1 -}}
+  {{- $caption = .Get 0 -}}
+{{- end -}}
+
+{{- $counterScope := "section" -}}
+{{- $rootSection := .Page.Site.GetPage (printf "/%s" .Page.Type) -}}
+{{- with $rootSection -}}
+  {{- with .Params.figureCounterScope -}}
+    {{- $counterScope = lower (trim (printf "%v" .) " ") -}}
+  {{- end -}}
+  {{- with .Params.figures -}}
+    {{- with .counterScope -}}
+      {{- $counterScope = lower (trim (printf "%v" .) " ") -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $figureNumber := add .Ordinal 1 -}}
+{{- if and (eq $counterScope "section") $rootSection -}}
+  {{- $pages := where $rootSection.RegularPagesRecursive "Layout" "!=" "search" -}}
+  {{- $pages = where $pages "Params.hidden" "!=" true -}}
+  {{- $pages = sort $pages "Weight" -}}
+
+  {{- $figureCountBeforePage := 0 -}}
+  {{- $foundCurrentPage := false -}}
+  {{- $figurePattern := `{{[<%]\s*figure(?:\s|>)` -}}
+
+  {{- range $pages -}}
+    {{- if not $foundCurrentPage -}}
+      {{- if eq .RelPermalink $.Page.RelPermalink -}}
+        {{- $foundCurrentPage = true -}}
+      {{- else -}}
+        {{- $figureCountBeforePage = add $figureCountBeforePage (len (findRE $figurePattern .RawContent)) -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+
+  {{- if $foundCurrentPage -}}
+    {{- $figureNumber = add $figureCountBeforePage (add $.Ordinal 1) -}}
+  {{- end -}}
+{{- end -}}
+
+<figure class="shortcode-figure" id="figure-{{ $figureNumber }}">
+  <div class="shortcode-figure-content">
+    {{- .Inner -}}
+  </div>
+  <figcaption class="shortcode-figure-caption">
+    {{ i18n "figure" }} {{ $figureNumber }}{{ if $caption }} — {{ $caption }}{{ end }}
+  </figcaption>
+</figure>

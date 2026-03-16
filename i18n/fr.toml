@@ -155,3 +155,6 @@ other = "Par sections"
 
 [list_view_posts]
 other = "Tous les articles"
+
+[figure]
+other = "Figure"

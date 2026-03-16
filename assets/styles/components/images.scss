@@ -26,7 +26,6 @@ img {
 }
 
 figure {
-  border: 1px solid rgba(get-light-color('accent-color'), 0.1);
   height: -moz-fit-content;
   height: fit-content;
   width: -moz-fit-content;
@@ -43,9 +42,6 @@ figcaption {
 }
 
 html[data-theme='dark'] {
-  figure {
-    border: 1px solid rgba(get-dark-color('accent-color'), 0.1);
-  }
   caption,
   figcaption {
     color: get-dark-color('muted-text-color');

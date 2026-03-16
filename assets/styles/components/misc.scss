@@ -121,6 +121,21 @@ details[open] > summary.admonition-header::before {
   }
 }
 
+.shortcode-figure {
+  margin: 1.5rem auto;
+  text-align: center;
+
+  .shortcode-figure-content {
+    display: inline-block;
+    max-width: 100%;
+  }
+
+  .shortcode-figure-caption {
+    color: get-light-color('muted-text-color');
+    font-size: 0.95rem;
+  }
+}
+
 html[data-theme='dark'] {
   pre {
     background-color: get-dark-color('bg-pre') !important;
@@ -170,6 +185,12 @@ html[data-theme='dark'] {
 
     &.inverted-dark {
       filter: invert(100%);
+    }
+  }
+
+  .shortcode-figure {
+    .shortcode-figure-caption {
+      color: get-dark-color('muted-text-color');
     }
   }
 }

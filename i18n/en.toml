@@ -155,3 +155,6 @@ other = "By sections"
 
 [list_view_posts]
 other = "All posts"
+
+[figure]
+other = "Figure"
