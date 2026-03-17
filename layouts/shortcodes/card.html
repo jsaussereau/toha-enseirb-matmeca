@@ -25,18 +25,45 @@
   {{- errorf "[%s] %q: card shortcode requires a page path (use path=\"...\" or ref=\"...\")" site.Language.Lang .Page.Path -}}
 {{- end -}}
 
-{{- $target := .Page.GetPage $path -}}
-{{- if not $target -}}
-  {{- $target = site.GetPage $path -}}
+{{- $clean := trim $path " " -}}
+{{- $noTrail := replaceRE "/+$" "" $clean -}}
+{{- $langPrefix := printf "/%s/" site.Language.Lang -}}
+
+{{- $candidates := slice $clean $noTrail (printf "%s/" $noTrail) -}}
+
+{{- if hasPrefix $clean $langPrefix -}}
+  {{- $withoutLang := replaceRE (printf "^/%s" site.Language.Lang) "" $clean -}}
+  {{- $withoutLangNoTrail := replaceRE "/+$" "" $withoutLang -}}
+  {{- $candidates = $candidates | append $withoutLang $withoutLangNoTrail (printf "%s/" $withoutLangNoTrail) -}}
 {{- end -}}
+
+{{- $scratch := newScratch -}}
+{{- $scratch.Set "target" false -}}
+{{- range $candidates -}}
+  {{- if and (not ($scratch.Get "target")) . -}}
+    {{- $candidateTarget := $.Page.GetPage . -}}
+    {{- if not $candidateTarget -}}
+      {{- $candidateTarget = site.GetPage . -}}
+    {{- end -}}
+    {{- if $candidateTarget -}}
+      {{- $scratch.Set "target" $candidateTarget -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $target := $scratch.Get "target" -}}
 
 {{- if not $target -}}
   {{- errorf "[%s] %q: card shortcode target page not found for %q" site.Language.Lang .Page.Path $path -}}
 {{- end -}}
 
+{{- if eq $target.RelPermalink .Page.RelPermalink -}}
+  {{- errorf "[%s] %q: card shortcode cannot target the current page (self-reference): %q" site.Language.Lang .Page.Path $path -}}
+{{- end -}}
+
 {{- if $target.IsSection -}}
   {{- partial "cards/section.html" (dict "section" $target "widthAttr" $postCardWidthAttr) -}}
 {{- else -}}
-  {{- $summary := default ($target.Params.summary | plainify) ($target.Description | plainify) -}}
+  {{- $summary := $target.Params.summary | default "" | plainify -}}
   {{- partial "cards/post-generic.html" (dict "page" $target "summary" $summary "widthAttr" $postCardWidthAttr) -}}
 {{- end -}}
