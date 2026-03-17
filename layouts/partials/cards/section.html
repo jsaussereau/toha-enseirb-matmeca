@@ -37,9 +37,9 @@
           {{ partial "misc/tags.html" $section.Params.tags }}
         {{ end }}
         {{ if $showSubsectionFooter }}
-            <p class="card-text text-muted" style="margin-top: -1.5em; margin-bottom: 1em;">{{ $postCount }} {{ i18n "posts" $postCount }}</p>
+            <p class="card-text text-muted" style="margin-bottom: 1em;">{{ $postCount }} {{ i18n "posts" $postCount }}</p>
         {{ else }}
-            <p class="card-text text-muted" style="margin-top: -0.5em; margin-bottom: 0.5em;">{{ $postCount }} {{ i18n "posts" $postCount }}</p>
+            <p class="card-text text-muted" style="margin-bottom: 0.5em;">{{ $postCount }} {{ i18n "posts" $postCount }}</p>
         {{ end }}
         </a>
     </div>
