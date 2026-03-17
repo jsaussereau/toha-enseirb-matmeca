@@ -33,10 +33,10 @@
 
 <a href="{{ $href }}" class="{{ $buttonClass }}" target="{{ if $newTab }}_blank{{ else }}_self{{ end }}"{{ if $newTab }} rel="noopener noreferrer"{{ end }}>
   {{- if and $icon (eq $iconPosition "left") -}}
-    <span class="shortcode-button-icon" style="margin-right: 7px;" aria-hidden="true"><i class="{{ $icon }}"></i></span>
+    <span class="shortcode-button-icon" style="margin-right: 3px;" aria-hidden="true"><i class="{{ $icon }}"></i></span>
   {{- end -}}
   <span class="shortcode-button-label">{{ $label }}</span>
   {{- if and $icon (eq $iconPosition "right") -}}
-    <span class="shortcode-button-icon" style="margin-left: 7px;" aria-hidden="true"><i class="{{ $icon }}"></i></span>
+    <span class="shortcode-button-icon" style="margin-left: 3px;" aria-hidden="true"><i class="{{ $icon }}"></i></span>
   {{- end -}}
 </a>
