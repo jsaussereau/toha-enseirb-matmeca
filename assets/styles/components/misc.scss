@@ -73,6 +73,11 @@ pre {
   }
 }
 
+.admonition-header svg {
+	width: 1.1em;
+	height: 1.1em;
+}
+
 details > summary.admonition-header {
   list-style: none;
   cursor: pointer;
