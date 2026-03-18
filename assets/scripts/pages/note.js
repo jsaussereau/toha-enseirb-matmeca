@@ -3,9 +3,13 @@ import imagesLoaded from 'imagesloaded'
 document.addEventListener('DOMContentLoaded', function () {
   function resizeGridItem (item) {
     const grid = document.getElementsByClassName('note-card-holder')[0]
+    if (!grid) return
     const rowHeight = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-auto-rows'))
     const rowGap = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-row-gap'))
-    const rowSpan = Math.ceil((item.querySelector('.item').getBoundingClientRect().height + rowGap) / (rowHeight + rowGap))
+    if (Number.isNaN(rowHeight) || Number.isNaN(rowGap) || rowHeight <= 0) return
+    const content = item.querySelector('.item')
+    if (!content) return
+    const rowSpan = Math.ceil((content.getBoundingClientRect().height + rowGap) / (rowHeight + rowGap))
     item.style.gridRowEnd = 'span ' + rowSpan
   }
 

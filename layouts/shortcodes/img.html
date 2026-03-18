@@ -22,41 +22,48 @@
   {{- $lightClasses = $lightClasses | append "shortcode-light-image" -}}
   {{- $darkClasses = $darkClasses | append "shortcode-dark-image" -}}
 {{- end -}}
+{{- $src := .Get "src" -}}
+{{- $title := .Get "title" -}}
+{{- $width := .Get "width" -}}
+{{- $height := .Get "height" -}}
+{{- $float := .Get "float" -}}
 
-<img src="{{ .Get "src"}}"
-    {{ if .Get "title" }}
-        alt="{{.Get "title"}}"
-    {{end}}
-    {{ if .Get "width" }}
-        width="{{.Get "width"}}"
-    {{end}}
-    {{ if .Get "height" }}
-        height="{{.Get "height"}}"
-    {{end}}
-    {{ if .Get "float" }}
-        style="float: {{.Get "float"}}; margin: 5px 10px;"
-    {{end}}
-    {{ if gt (len $lightClasses) 0 }}
-        class="{{ delimit $lightClasses " " }}"
-    {{end}}
->
+{{- $lightAttrs := slice (printf "src=%q" $src) -}}
+{{- with $title -}}
+  {{- $lightAttrs = $lightAttrs | append (printf "alt=%q" .) -}}
+{{- end -}}
+{{- with $width -}}
+  {{- $lightAttrs = $lightAttrs | append (printf "width=%q" .) -}}
+{{- end -}}
+{{- with $height -}}
+  {{- $lightAttrs = $lightAttrs | append (printf "height=%q" .) -}}
+{{- end -}}
+{{- with $float -}}
+  {{- $lightAttrs = $lightAttrs | append (printf "style=%q" (printf "float: %s; margin: 5px 10px;" .)) -}}
+{{- end -}}
+{{- if gt (len $lightClasses) 0 -}}
+  {{- $lightAttrs = $lightAttrs | append (printf "class=%q" (delimit $lightClasses " ")) -}}
+{{- end -}}
+
+<img {{ delimit $lightAttrs " " | safeHTMLAttr }}>
 
 {{- if $srcDark -}}
-<img src="{{ $srcDark }}"
-  {{ if .Get "title" }}
-    alt="{{.Get "title"}}"
-  {{end}}
-  {{ if .Get "width" }}
-    width="{{.Get "width"}}"
-  {{end}}
-  {{ if .Get "height" }}
-    height="{{.Get "height"}}"
-  {{end}}
-    {{ if .Get "float" }}
-        style="float: {{.Get "float"}}; margin: 5px 10px;"
-    {{end}}
-  {{ if gt (len $darkClasses) 0 }}
-    class="{{ delimit $darkClasses " " }}"
-  {{end}}
->
+  {{- $darkAttrs := slice (printf "src=%q" $srcDark) -}}
+  {{- with $title -}}
+    {{- $darkAttrs = $darkAttrs | append (printf "alt=%q" .) -}}
+  {{- end -}}
+  {{- with $width -}}
+    {{- $darkAttrs = $darkAttrs | append (printf "width=%q" .) -}}
+  {{- end -}}
+  {{- with $height -}}
+    {{- $darkAttrs = $darkAttrs | append (printf "height=%q" .) -}}
+  {{- end -}}
+  {{- with $float -}}
+    {{- $darkAttrs = $darkAttrs | append (printf "style=%q" (printf "float: %s; margin: 5px 10px;" .)) -}}
+  {{- end -}}
+  {{- if gt (len $darkClasses) 0 -}}
+    {{- $darkAttrs = $darkAttrs | append (printf "class=%q" (delimit $darkClasses " ")) -}}
+  {{- end -}}
+
+  <img {{ delimit $darkAttrs " " | safeHTMLAttr }}>
 {{- end -}}
