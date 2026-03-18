@@ -60,6 +60,10 @@ body.type-notes {
                 padding: 1rem;
                 border-radius: 0.5rem 0 0 0;
 
+                .highlight:not(:last-child) {
+                  margin-bottom: 10px;
+                }
+
                 pre {
                   margin: 0;
                   border-radius: 3px;
