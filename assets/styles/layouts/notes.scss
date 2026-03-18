@@ -9,7 +9,6 @@ body.type-notes {
       flex: 80%;
       max-width: 80%;
       order: 2;
-      /* background-color: lightseagreen; */
       padding: 0;
       position: relative;
       padding-left: 0.5rem;
@@ -33,10 +32,12 @@ body.type-notes {
             flex: auto;
 
             .card {
-              margin: 0.5rem;
+              margin: 0 0.5rem 0.5rem 0.5rem;
+            	border-radius: 10px;
 
               .card-body {
                 padding: 1rem;
+                border-radius: 0.5rem 0 0 0 ;
 
                 pre {
                   margin: 0;
@@ -47,21 +48,24 @@ body.type-notes {
           }
 
           .note-title {
-            padding-left: 1rem;
-            color: get-light-color('accent-color');
+            padding: 0.5rem 1rem;
+            margin: 0.5rem 0.5rem 0 0.5rem;
+            // color: get-light-color('accent-color');
+            border-radius: 10px 10px 0 0 ;
+            text-align: center;
 
             &:before {
               content: '';
               display: inline-block;
               width: 98%;
               height: 100%;
-              margin-bottom: -26px;
-              border-bottom: 1px solid get-light-color('accent-color');
+              margin-bottom: -19px;
+              border-bottom: 1px solid get-light-color('text-color');
             }
 
             span {
               background: get-light-color('bg-secondary');
-              padding-right: 5px;
+              padding: 0 10px;
             }
           }
         }
