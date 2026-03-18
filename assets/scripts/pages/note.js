@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function resizeAllGridItems () {
-    const allItems = document.getElementsByClassName('note-card')
+    const allItems = document.querySelectorAll('.note-card-holder > .note-card')
     for (let x = 0; x < allItems.length; x++) {
       resizeGridItem(allItems[x])
     }
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   window.addEventListener('resize', resizeAllGridItems)
 
-  const allItems = document.getElementsByClassName('note-card')
+  const allItems = document.querySelectorAll('.note-card-holder > .note-card')
   for (let x = 0; x < allItems.length; x++) {
     imagesLoaded(allItems[x], resizeInstance)
   }

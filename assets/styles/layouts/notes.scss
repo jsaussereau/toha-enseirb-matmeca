@@ -1,4 +1,7 @@
 body.type-notes {
+  --note-card-width: 25rem;
+  --note-grid-gap: 1rem;
+
   .wrapper {
     display: flex;
     padding: 0;
@@ -22,26 +25,40 @@ body.type-notes {
 
         .note-card-holder {
           margin-top: 2rem;
-          display: flex;
-          flex-flow: wrap;
+          display: grid;
+          grid-template-columns: repeat(auto-fit, var(--note-card-width));
+          grid-auto-rows: 8px;
+          gap: var(--note-grid-gap);
+          grid-auto-flow: dense;
+          align-items: start;
+          justify-content: center;
           margin-left: auto;
           padding: 0;
 
           .note-card {
-            align-self: flex-start;
-            flex: auto;
+            align-self: start;
+            width: var(--note-card-width);
+            max-width: 100%;
+
+            &.medium-note,
+            &.large-note,
+            &.wide-note,
+            &.double-note {
+              grid-column: span 2;
+              width: calc(var(--note-card-width) * 2 + var(--note-grid-gap));
+            }
 
             img {
-              margin-bottom: 10px
+              margin-bottom: 10px;
             }
 
             .card {
-              margin: 0 0.5rem 0.5rem 0.5rem;
-            	border-radius: 10px;
+              margin: 0;
+              border-radius: 10px;
 
               .card-body {
                 padding: 1rem;
-                border-radius: 0.5rem 0 0 0 ;
+                border-radius: 0.5rem 0 0 0;
 
                 pre {
                   margin: 0;
@@ -53,9 +70,8 @@ body.type-notes {
 
           .note-title {
             padding: 0.5rem 1rem;
-            margin: 0.5rem 0.5rem 0 0.5rem;
-            // color: get-light-color('accent-color');
-            border-radius: 10px 10px 0 0 ;
+            margin: 0 0 0.25rem;
+            border-radius: 10px 10px 0 0;
             text-align: center;
 
             &:before {
@@ -72,15 +88,31 @@ body.type-notes {
               padding: 0 10px;
             }
           }
-        }
-      }
-    }
-  }
 
-  @include media('<=extra-large') {
-    .note-card-holder {
-      .note-card {
-        flex: 30%;
+          .note-card.note-card-group {
+            grid-column: span 2;
+            width: calc(var(--note-card-width) * 2 + var(--note-grid-gap));
+
+            .note-card-group-inner {
+              display: grid;
+              grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+              gap: var(--note-grid-gap);
+            }
+
+            .note-card {
+              width: 100%;
+              max-width: 100%;
+
+              &.medium-note,
+              &.large-note,
+              &.wide-note,
+              &.double-note {
+                grid-column: span 1;
+                width: 100%;
+              }
+            }
+          }
+        }
       }
     }
   }
@@ -106,9 +138,6 @@ body.type-notes {
             padding-right: 0.5rem;
             position: relative;
             @include transition();
-            .note-card {
-              flex: 50%;
-            }
           }
         }
         .container {
@@ -124,20 +153,31 @@ body.type-notes {
   }
 
   @include media('<=medium') {
-    .note-card-holder .note-card {
-      max-width: 50%;
-      min-width: 50%;
-      @include transition();
-    }
+    --note-card-width: 21rem;
 
-    .content-section.hide .note-card-holder .note-card {
-      max-width: 100%;
-      min-width: 100%;
-      @include transition();
+    .note-card-holder {
+      .note-card {
+        @include transition();
+
+        &.medium-note,
+        &.large-note,
+        &.wide-note,
+        &.double-note {
+          grid-column: span 1;
+          width: var(--note-card-width);
+        }
+      }
+
+      .note-card.note-card-group {
+        grid-column: span 1;
+        width: var(--note-card-width);
+      }
     }
   }
 
   @include media('<=small') {
+    --note-card-width: min(100%, 25rem);
+
     .wrapper {
       padding-left: 0px;
       padding-right: 0px;
@@ -154,11 +194,29 @@ body.type-notes {
           .note-card-holder {
             margin-top: 0.5rem;
             @include transition();
+            grid-template-columns: 1fr;
+            justify-content: stretch;
 
             .note-card {
-              flex: 100%;
+              width: 100%;
               max-width: 100%;
               @include transition();
+
+              &.medium-note,
+              &.large-note,
+              &.wide-note,
+              &.double-note {
+                grid-column: span 1;
+                width: 100%;
+              }
+            }
+
+            .note-card.note-card-group {
+              width: 100%;
+
+              .note-card-group-inner {
+                grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+              }
             }
           }
         }
