@@ -198,12 +198,12 @@ body.type-notes {
           .note-card-holder {
             margin-top: 0.5rem;
             @include transition();
-            grid-template-columns: 1fr;
-            justify-content: stretch;
+            display: block;
 
             .note-card {
               width: 100%;
               max-width: 100%;
+              margin-bottom: var(--note-grid-gap);
               @include transition();
 
               &.medium-note,
@@ -219,8 +219,20 @@ body.type-notes {
               width: 100%;
 
               .note-card-group-inner {
-                grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+                display: block;
+
+                .note-card {
+                  margin-bottom: var(--note-grid-gap);
+                }
+
+                .note-card:last-child {
+                  margin-bottom: 0;
+                }
               }
+            }
+
+            .note-card:last-child {
+              margin-bottom: 0;
             }
           }
         }
