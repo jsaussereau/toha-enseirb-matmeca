@@ -31,7 +31,12 @@
   {{ $backHref := site.BaseURL | relLangURL }}
   {{ $showSidebarButtons := and $isPostLikeList $navbarCurrentSectionOnly (ne $normalizedCurrentHref $normalizedPostsRootHref) }}
   {{ if ne $normalizedCurrentHref $normalizedPostsRootHref }}
-    {{ $backHref = $listRootHref }}
+    {{ $parentPage := .Parent }}
+    {{ if $parentPage }}
+      {{ $backHref = $parentPage.RelPermalink }}
+    {{ else }}
+      {{ $backHref = $listRootHref }}
+    {{ end }}
   {{ end }}
 
   {{ $groupByCategoryDefault := $contentFeature.groupByCategory | default true }}

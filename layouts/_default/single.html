@@ -21,27 +21,30 @@
   {{ end }}
   {{ $listHeadingText := $contentFeature.title | default $defaultListHeadingText }}
   {{ $currentSection := .CurrentSection }}
-  {{ $navSection := $currentSection }}
-  {{ if and $isPostLike .Parent $rootSection }}
-    {{ $normalizedRoot := printf "%s/" (replaceRE "/+$" "" $rootSection.RelPermalink) }}
-    {{ $normalizedParent := printf "%s/" (replaceRE "/+$" "" .Parent.RelPermalink) }}
-    {{ if ne $normalizedParent $normalizedRoot }}
-      {{ $navSection = .Parent }}
-    {{ end }}
-  {{ end }}
   {{ $showCurrentSectionOnly := false }}
-  {{ if and $isPostLike $navbarCurrentSectionOnly $rootSection $navSection }}
+  {{ if and $isPostLike $navbarCurrentSectionOnly $rootSection $currentSection }}
     {{ $normalizedRoot := printf "%s/" (replaceRE "/+$" "" $rootSection.RelPermalink) }}
-    {{ $normalizedCurrentSection := printf "%s/" (replaceRE "/+$" "" $navSection.RelPermalink) }}
+    {{ $normalizedCurrentSection := printf "%s/" (replaceRE "/+$" "" $currentSection.RelPermalink) }}
     {{ $showCurrentSectionOnly = ne $normalizedCurrentSection $normalizedRoot }}
   {{ end }}
   {{ $backHref := $listRootHref }}
-  {{ if and $showCurrentSectionOnly $navSection }}
-    {{ $backHref = $navSection.RelPermalink }}
+  {{ if and $isPostLike $navbarCurrentSectionOnly }}
+    {{ $parentPage := .Parent }}
+    {{ if $parentPage }}
+      {{ $normalizedParent := printf "%s/" (replaceRE "/+$" "" $parentPage.RelPermalink) }}
+      {{ $normalizedListRoot := printf "%s/" (replaceRE "/+$" "" $listRootHref) }}
+      {{ if ne $normalizedParent $normalizedListRoot }}
+        {{ $backHref = $parentPage.RelPermalink }}
+      {{ else if and $showCurrentSectionOnly $currentSection }}
+        {{ $backHref = $currentSection.RelPermalink }}
+      {{ end }}
+    {{ else if and $showCurrentSectionOnly $currentSection }}
+      {{ $backHref = $currentSection.RelPermalink }}
+    {{ end }}
   {{ end }}
   {{ $treeItems := slice }}
-  {{ if and $showCurrentSectionOnly $navSection }}
-    {{ $treeItems = partial "helpers/get-section-nav-items.html" $navSection }}
+  {{ if and $showCurrentSectionOnly $currentSection }}
+    {{ $treeItems = partial "helpers/get-section-nav-items.html" $currentSection }}
   {{ else if $rootSection }}
     {{ $treeItems = partial "helpers/get-section-nav-items.html" $rootSection }}
   {{ end }}
@@ -71,8 +74,8 @@
         {{ end }}
         <div class="sidebar-tree section-sidebar-tree">
           <ul class="tree" id="tree">
-            {{ if and $isPostLike $showCurrentSectionOnly $navSection }}
-              <li id="list-heading"><a href="{{ $navSection.RelPermalink }}">{{ $navSection.Title }}</a></li>
+            {{ if and $isPostLike $showCurrentSectionOnly $currentSection }}
+              <li id="list-heading"><a href="{{ $currentSection.RelPermalink }}">{{ $currentSection.Title }}</a></li>
               <div class="subtree section-subtree">
                 {{ partial "navigators/sidebar-sections.html" (dict "items" $treeItems "ctx" .) }}
               </div>
