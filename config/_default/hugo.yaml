@@ -32,7 +32,7 @@ params:
 
   features:
     notes:
-      enable: false
+      enable: true
 
     flags:
       enable: true

@@ -3,7 +3,7 @@
 {{ $blogTitle  := site.Params.features.blog.title | default (i18n "courses") }}
 {{ $tutorialsEnabled  := site.Params.features.tutorials.enable  | default true }}
 {{ $tutorialsTitle := site.Params.features.tutorials.title  | default (i18n "tutorials") }}
-{{ $notesEnabled  := site.Params.features.notes.enable  | default false }}
+{{ $notesEnabled  := site.Params.features.notes.enable  | default true }}
 {{ $notesTitle := site.Params.features.notes.title  | default (i18n "notes") }}
 {{ $maxVisibleSections   := site.Params.topNavbar.maxVisibleSections   | default 5 }}
 {{ $blurredNavbar := site.Params.topNavbar.blurTransparentNavbar | default false }}
