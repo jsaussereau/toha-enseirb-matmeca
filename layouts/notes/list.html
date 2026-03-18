@@ -1,42 +1,180 @@
 {{ define "navbar" }}
-    {{ partial "navigators/navbar.html" . }}
+		{{ partial "navigators/navbar.html" . }}
 {{ end }}
 
 {{ define "sidebar" }}
-  {{ $homePage:="#" }}
-  {{ if hugo.IsMultilingual }}
-    {{ $homePage = (path.Join (cond ( eq .Language.Lang "en") "" .Language.Lang) .Type) }}
-  {{ end }}
+	{{ $homePage := "#" }}
+	{{ if hugo.IsMultilingual }}
+		{{ $homePage = (path.Join (cond (eq .Language.Lang "en") "" .Language.Lang) .Type) }}
+	{{ end }}
+	{{ $sectionType := .Type }}
+	{{ $isPostLikeList := or (eq $sectionType "posts") (eq $sectionType "tutorials") (eq $sectionType "notes") }}
+	{{ $contentFeature := partial "helpers/get-post-like-feature.html" (dict "type" $sectionType) }}
+	{{ $defaultAllSectionsButton := i18n "all_courses" }}
+	{{ if eq $sectionType "tutorials" }}
+		{{ $defaultAllSectionsButton = i18n "all_tutorials" }}
+	{{ else if eq $sectionType "notes" }}
+		{{ $defaultAllSectionsButton = i18n "notes" }}
+	{{ end }}
+	{{ $defaultListHeadingText := i18n "courses" }}
+	{{ if eq $sectionType "tutorials" }}
+		{{ $defaultListHeadingText = i18n "tutorials" }}
+	{{ else if eq $sectionType "notes" }}
+		{{ $defaultListHeadingText = i18n "notes" }}
+	{{ end }}
+	{{ $defaultListItemsText := i18n "list_view_posts" }}
+	{{ if eq $sectionType "notes" }}
+		{{ $defaultListItemsText = i18n "notes" }}
+	{{ end }}
+	{{ $allSectionsButton  := $contentFeature.allSectionsButton | default $defaultAllSectionsButton }}
+	{{ $navbarCurrentSectionOnly := $contentFeature.navbarCurrentSectionOnly | default true }}
+	{{ $menuInfo := partial "helpers/get-sidebar-menu.html" (dict "type" $sectionType) }}
+	{{ $menuName := index $menuInfo "menuName" }}
+	{{ $menuItems := index $menuInfo "menuItems" }}
+	{{ $rootSection := .Site.GetPage (printf "/%s" $sectionType) }}
+	{{ $listRootHref := $sectionType | relLangURL }}
+	{{ if and $isPostLikeList $rootSection }}
+		{{ $listRootHref = $rootSection.RelPermalink }}
+	{{ end }}
+	{{ $sectionNavItems := slice }}
+	{{ if and $isPostLikeList $rootSection }}
+		{{ $sectionNavItems = partial "helpers/get-section-nav-items.html" $rootSection }}
+	{{ end }}
+	{{ $normalizedPostsRootHref := printf "%s/" (replaceRE "/+$" "" $listRootHref) }}
+	{{ $normalizedCurrentHref := printf "%s/" (replaceRE "/+$" "" .RelPermalink) }}
+	{{ $backHref := site.BaseURL | relLangURL }}
+	{{ $showSidebarButtons := and $isPostLikeList $navbarCurrentSectionOnly (ne $normalizedCurrentHref $normalizedPostsRootHref) }}
+	{{ if ne $normalizedCurrentHref $normalizedPostsRootHref }}
+		{{ $parentPage := .Parent }}
+		{{ if $parentPage }}
+			{{ $backHref = $parentPage.RelPermalink }}
+		{{ else }}
+			{{ $backHref = $listRootHref }}
+		{{ end }}
+	{{ end }}
 
-  <section class="sidebar-section" id="sidebar-section">
-    <div class="sidebar-holder">
-      <div class="sidebar" id="sidebar">
-        <div class="sidebar-tree">
-          <ul class="tree" id="tree">
-            <li id="list-heading"><a href="{{ .Type | relLangURL }}" data-filter="all">{{ i18n .Type }}</a></li>
-            <div class="subtree">
-                {{ partial "navigators/sidebar.html" (dict "menuName" "notes" "menuItems" site.Menus.notes  "ctx" . ) }}
-            </div>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
+	{{ $groupByCategoryDefault := $contentFeature.groupByCategory | default true }}
+	{{ $hasGroupedCards := false }}
+	{{ $sections := sort .Sections "Weight" }}
+	{{ range $sections }}
+		{{ $sectionPosts := where .RegularPagesRecursive "Layout" "!=" "search" }}
+		{{ $sectionPosts = where $sectionPosts "Params.hidden" "!=" true }}
+		{{ if gt (len $sectionPosts) 0 }}
+			{{ $hasGroupedCards = true }}
+		{{ end }}
+	{{ end }}
+	{{ $directPosts := where .RegularPages "Layout" "!=" "search" }}
+	{{ $directPosts = where $directPosts "Params.hidden" "!=" true }}
+	{{ if gt (len $directPosts) 0 }}
+		{{ $hasGroupedCards = true }}
+	{{ end }}
+
+	<section class="sidebar-section" id="sidebar-section">
+		<div class="sidebar-holder">
+			<div class="sidebar" id="sidebar">
+				{{ if $showSidebarButtons }}
+					<div class="sidebar-button-row">
+						<div class="sidebar-button">
+							<button
+								class="btn filled-button"
+								type="button"
+								data-href="{{ $backHref }}"
+								onclick="window.location.href=this.dataset.href"
+							>
+								<i class="fa-solid fa-circle-arrow-left" style="margin-right: 5px;"></i>
+								{{ i18n "back" }}
+							</button>
+						</div>
+						<div class="sidebar-button">
+							<button class="btn filled-button" data-href="{{ $listRootHref }}" data-filter="all" onclick="window.location.href=this.dataset.href">
+								<i class="fa-solid fa-circle-arrow-up" style="margin-right: 5px;"></i>
+								{{ $allSectionsButton }}
+							</button>
+						</div>
+					</div>
+				{{ end }}
+
+				{{ if $hasGroupedCards }}
+					<div class="list-view-mode-wrapper">
+						<label for="list-view-mode" class="list-view-mode-label">{{ i18n "list_view_mode" }}</label>
+						<select
+							id="list-view-mode"
+							class="form-select form-select-sm"
+							data-default-mode="{{ if $groupByCategoryDefault }}sections{{ else }}posts{{ end }}"
+						>
+							<option value="sections">{{ i18n "list_view_sections" }}</option>
+							<option value="posts">{{ $defaultListItemsText }}</option>
+						</select>
+					</div>
+				{{ end }}
+
+				<div class="sidebar-tree">
+					<ul class="tree" id="tree">
+						{{ $listHeadingText := $contentFeature.title | default $defaultListHeadingText }}
+						<li id="list-heading"><a href="{{ $listRootHref }}" data-filter="all">{{ $listHeadingText }}</a></li>
+						<div class="subtree">
+							{{ if $isPostLikeList }}
+								{{ partial "navigators/sidebar-sections.html" (dict "items" $sectionNavItems "ctx" .) }}
+							{{ else }}
+								{{ partial "navigators/sidebar.html" (dict "menuName" $menuName "menuItems" $menuItems "ctx" .) }}
+							{{ end }}
+						</div>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</section>
 {{ end }}
 
 {{ define "content" }}
 <section class="content-section" id="content-section">
-  <div class="content container-fluid" id="content">
-    <div class="container-fluid note-card-holder" id="note-card-holder">
-      {{ $notes := where .RegularPagesRecursive "Layout" "!=" "search" }}
-      {{ $paginator := .Paginate $notes 10 }}
-      {{ range $paginator.Pages }}
-        {{ .Content }}
-      {{ end }}
-    </div>
-    <div class="paginator">
-      {{/*  {{ partial "pagination.html" . }}  */}}
-    </div>
-  </div>
+	<div class="content container-fluid" id="content">
+		{{ $contentFeature := partial "helpers/get-post-like-feature.html" (dict "type" .Type) }}
+		{{ $groupByCategoryDefault := $contentFeature.groupByCategory | default true }}
+
+		{{ $sectionCards := slice }}
+		{{ $directPosts := where .RegularPages "Layout" "!=" "search" }}
+		{{ $directPosts = where $directPosts "Params.hidden" "!=" true }}
+		{{ $sections := sort .Sections "Weight" }}
+		{{ range $sections }}
+			{{ $sectionPosts := where .RegularPagesRecursive "Layout" "!=" "search" }}
+			{{ $sectionPosts = where $sectionPosts "Params.hidden" "!=" true }}
+			{{ if gt (len $sectionPosts) 0 }}
+				{{ $sectionCards = $sectionCards | append . }}
+			{{ end }}
+		{{ end }}
+
+		{{ $showGroupedByDefault := and $groupByCategoryDefault (gt (add (len $sectionCards) (len $directPosts)) 0) }}
+
+		{{ if gt (add (len $sectionCards) (len $directPosts)) 0 }}
+			<div class="container-fluid post-card-holder{{ if not $showGroupedByDefault }} d-none{{ end }}" id="section-card-view">
+				{{ range $sectionCards }}
+					{{ partial "cards/section.html" (dict "section" .) }}
+				{{ end }}
+
+				{{ range $directPosts }}
+					{{ partial "cards/post.html" . }}
+				{{ end }}
+			</div>
+		{{ end }}
+
+		<div class="container-fluid post-card-holder{{ if $showGroupedByDefault }} d-none{{ end }}" id="post-list-view">
+			{{ $posts := where .RegularPagesRecursive "Layout" "!=" "search" }}
+			{{ $posts = where $posts "Params.hidden" "!=" true }}
+			{{ $numShow := site.Params.features.pagination.maxPostsPerPage | default 12 }}
+			{{ $paginator := .Paginate $posts $numShow }}
+			{{ range $paginator.Pages }}
+				{{ if .Layout }}
+					{{/* ignore the search.md file */}}
+				{{ else }}
+					{{ partial "cards/post.html" . }}
+				{{ end }}
+			{{ end }}
+		</div>
+
+		<div class="paginator{{ if $showGroupedByDefault }} d-none{{ end }}" id="post-list-paginator">
+			{{/*  {{ partial "pagination.html" . }}  */}}
+		</div>
+	</div>
 </section>
 {{ end }}

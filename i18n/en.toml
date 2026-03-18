@@ -20,6 +20,9 @@ other = "Tutorials"
 [all_tutorials]
 other = "All Tutorials"
 
+[all_notes]
+other = "All snippets"
+
 [toc_heading]
 other = "Table of Contents"
 

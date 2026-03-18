@@ -13,5 +13,15 @@
   {{- $items = $items | append . -}}
 {{- end -}}
 
+{{- if eq (len $items) 0 -}}
+  {{- $recursivePages := where .RegularPagesRecursive "Layout" "!=" "search" -}}
+  {{- $recursivePages = where $recursivePages "Params.hidden" "!=" true -}}
+  {{- $recursivePages = sort $recursivePages "Weight" -}}
+  {{- $recursivePages = sort $recursivePages "RelPermalink" -}}
+  {{- range $recursivePages -}}
+    {{- $items = $items | append . -}}
+  {{- end -}}
+{{- end -}}
+
 {{- $items = sort $items "Weight" -}}
 {{- return $items -}}

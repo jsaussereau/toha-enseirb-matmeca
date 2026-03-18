@@ -20,6 +20,9 @@ other = "Tutoriels"
 [all_tutorials]
 other = "Tous les tutoriels"
 
+[all_notes]
+other = "Tous les snippets"
+
 [toc_heading]
 other = "Table des matières"
 

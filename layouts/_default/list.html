@@ -8,10 +8,24 @@
     {{ $homePage = (path.Join (cond (eq .Language.Lang "en") "" .Language.Lang) .Type) }}
   {{ end }}
   {{ $sectionType := .Type }}
-  {{ $isPostLikeList := or (eq $sectionType "posts") (eq $sectionType "tutorials") }}
+  {{ $isPostLikeList := or (eq $sectionType "posts") (eq $sectionType "tutorials") (eq $sectionType "notes") }}
   {{ $contentFeature := partial "helpers/get-post-like-feature.html" (dict "type" $sectionType) }}
-  {{ $defaultAllSectionsButton := cond (eq $sectionType "tutorials") (i18n "all_tutorials") (i18n "all_courses") }}
-  {{ $defaultListHeadingText := cond (eq $sectionType "tutorials") (i18n "tutorials") (i18n "courses") }}
+  {{ $defaultAllSectionsButton := i18n "all_courses" }}
+  {{ if eq $sectionType "tutorials" }}
+    {{ $defaultAllSectionsButton = i18n "all_tutorials" }}
+  {{ else if eq $sectionType "notes" }}
+    {{ $defaultAllSectionsButton = i18n "all_notes" }}
+  {{ end }}
+  {{ $defaultListHeadingText := i18n "courses" }}
+  {{ if eq $sectionType "tutorials" }}
+    {{ $defaultListHeadingText = i18n "tutorials" }}
+  {{ else if eq $sectionType "notes" }}
+    {{ $defaultListHeadingText = i18n "notes" }}
+  {{ end }}
+  {{ $defaultListItemsText := i18n "list_view_posts" }}
+  {{ if eq $sectionType "notes" }}
+    {{ $defaultListItemsText = i18n "notes" }}
+  {{ end }}
   {{ $allSectionsButton  := $contentFeature.allSectionsButton | default $defaultAllSectionsButton }}
   {{ $navbarCurrentSectionOnly := $contentFeature.navbarCurrentSectionOnly | default true }}
   {{ $menuInfo := partial "helpers/get-sidebar-menu.html" (dict "type" $sectionType) }}
@@ -89,7 +103,7 @@
               data-default-mode="{{ if $groupByCategoryDefault }}sections{{ else }}posts{{ end }}"
             >
               <option value="sections">{{ i18n "list_view_sections" }}</option>
-              <option value="posts">{{ i18n "list_view_posts" }}</option>
+              <option value="posts">{{ $defaultListItemsText }}</option>
             </select>
           </div>
         {{ end }}
