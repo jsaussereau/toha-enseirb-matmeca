@@ -19,7 +19,7 @@ shortcuts:
   summary: "Tutoriels génériques qui ne sont directement liés à un module d'enseignement."
   url: "/fr/tutorials/"
 
-- name: Snippets
-  logo: /icons/snippet.png
-  summary: "Extraits de code réutilisables pour différents projets ou besoins."
+- name: Fiches
+  logo: /icons/revision.png
+  summary: 'Fiches "cheatsheet" et fragments de code réutilisables pour différents projets.'
   url: "/fr/notes/"
