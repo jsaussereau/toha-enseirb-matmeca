@@ -4,9 +4,6 @@
 body.kind-section,
 body.kind-term,
 body.kind-page {
-  .post-card {
-    max-width: 500px;
-  }
   .wrapper {
     display: flex;
     padding: 0;
@@ -165,8 +162,10 @@ body.kind-page {
 
   @include media('>=extra-large') {
     .post-card {
-      width: 100%;
       min-width: 0;
+      max-width: 500px;
+      width: 100%;
+      justify-self: start;
     }
 
     .wrapper {
@@ -174,8 +173,11 @@ body.kind-page {
         .content {
           .post-card-holder {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            justify-content: start;
+            justify-items: start;
             align-items: stretch;
+            margin-left: 0;
           }
         }
       }
