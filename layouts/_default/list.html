@@ -55,7 +55,7 @@
 
   {{ $groupByCategoryDefault := $contentFeature.groupByCategory | default true }}
   {{ $hasGroupedCards := false }}
-  {{ $sections := sort .Sections "Weight" }}
+  {{ $sections := where (sort .Sections "Weight") "Params.hidden" "!=" true }}
   {{ range $sections }}
     {{ $sectionPosts := where .RegularPagesRecursive "Layout" "!=" "search" }}
     {{ $sectionPosts = where $sectionPosts "Params.hidden" "!=" true }}
@@ -135,7 +135,7 @@
     {{ $sectionCards := slice }}
     {{ $directPosts := where .RegularPages "Layout" "!=" "search" }}
     {{ $directPosts = where $directPosts "Params.hidden" "!=" true }}
-    {{ $sections := sort .Sections "Weight" }}
+    {{ $sections := where (sort .Sections "Weight") "Params.hidden" "!=" true }}
     {{ range $sections }}
       {{ $sectionPosts := where .RegularPagesRecursive "Layout" "!=" "search" }}
       {{ $sectionPosts = where $sectionPosts "Params.hidden" "!=" true }}
