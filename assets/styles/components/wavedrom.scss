@@ -1,0 +1,40 @@
+/* Define theme-aware CSS variables so JS can read them at runtime */
+:root {
+  --wavedrom-stroke: #{get-light-color('text-color')};
+  --wavedrom-clock-arrow-fill: #{get-light-color('text-color')};
+  --wavedrom-gap-fill: #{get-light-color('bg-primary')};
+  --wavedrom-info-fill: #{get-light-color('text-color')};
+  --wavedrom-box2-fill: #{get-light-color('bg-primary')};
+  --wavedrom-box3-fill: #ffffb4;
+  --wavedrom-box4-fill: #ffe0b9;
+  --wavedrom-box5-fill: #b9e0ff;
+  --wavedrom-box6-fill: #ccfdfe;
+  --wavedrom-box7-fill: #cdfdc5;
+  --wavedrom-box8-fill: #f0c1fb;
+  --wavedrom-box9-fill: #f5c2c0;
+}
+
+html[data-theme='dark'] {
+  --wavedrom-stroke: #{get-dark-color('text-color')};
+  --wavedrom-clock-arrow-fill: #{get-dark-color('text-color')};
+  --wavedrom-gap-fill: #{get-dark-color('bg-primary')};
+  --wavedrom-info-fill: #{get-dark-color('text-color')};
+  --wavedrom-box2-fill: #{get-dark-color('bg-primary')};
+  --wavedrom-box3-fill: #6b661f;
+  --wavedrom-box4-fill: #6b3f1a;
+  --wavedrom-box5-fill: #274b66;
+  --wavedrom-box6-fill: #0f6062;
+  --wavedrom-box7-fill: #1f6b3a;
+  --wavedrom-box8-fill: #5b356a;
+  --wavedrom-box9-fill: #6b3436;
+}
+
+.WaveDrom {
+  rect{
+    fill: none !important;
+  }
+
+  text {
+    fill: var(--wavedrom-info-fill) !important;
+  }
+}
