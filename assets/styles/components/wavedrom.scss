@@ -12,6 +12,8 @@
   --wavedrom-box7-fill: #cdfdc5;
   --wavedrom-box8-fill: #f0c1fb;
   --wavedrom-box9-fill: #f5c2c0;
+  --wavedrom-gate-fill: #ffffcc;
+  --wavedrom-gate-stroke: #{get-light-color('text-color')};
 }
 
 html[data-theme='dark'] {
@@ -27,6 +29,8 @@ html[data-theme='dark'] {
   --wavedrom-box7-fill: #1f6b3a;
   --wavedrom-box8-fill: #5b356a;
   --wavedrom-box9-fill: #6b3436;
+  --wavedrom-gate-fill: #b98a46;
+  --wavedrom-gate-stroke: #{get-dark-color('text-color')};
 }
 
 .WaveDrom {

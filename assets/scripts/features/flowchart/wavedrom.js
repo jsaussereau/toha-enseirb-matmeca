@@ -46,12 +46,14 @@ function applyThemeToWaveDrom() {
   const box7Fill = (computed.getPropertyValue('--wavedrom-box7-fill') || '').trim() || null
   const box8Fill = (computed.getPropertyValue('--wavedrom-box8-fill') || '').trim() || null
   const box9Fill = (computed.getPropertyValue('--wavedrom-box9-fill') || '').trim() || null
+  const gateFill = (computed.getPropertyValue('--wavedrom-gate-fill') || '').trim() || null
+  const gateStroke = (computed.getPropertyValue('--wavedrom-gate-stroke') || '').trim() || null
 
   // set data-theme on all containers for easier debugging/scoping
   document.querySelectorAll('.wavedrom').forEach((el) => el.setAttribute('data-theme', theme))
 
   // update generated svg elements
-  let paths = Array.from(document.querySelectorAll('.WaveDrom path.s1, .WaveDrom path.s2, .WaveDrom path.s3'))
+  let paths = Array.from(document.querySelectorAll('.WaveDrom path.s1, .WaveDrom path.s2, .WaveDrom path.s3, .WaveDrom path.wire'))
   paths.forEach((p) => {
     if (stroke) p.style.setProperty('stroke', stroke, 'important')
     else p.style.removeProperty('stroke')
@@ -76,6 +78,15 @@ function applyThemeToWaveDrom() {
   infoTexts.forEach((t) => {
     if (infoFill) t.style.setProperty('fill', infoFill, 'important')
     else t.style.removeProperty('fill')
+  })
+
+  // Gates
+  let gates = document.querySelectorAll('.WaveDrom path.gate')
+  gates.forEach((t) => {
+    if (gateFill) t.style.setProperty('fill', gateFill, 'important')
+    else t.style.removeProperty('fill')
+    if (gateStroke) t.style.setProperty('stroke', gateStroke, 'important')
+    else t.style.removeProperty('stroke')
   })
 
   // 2
