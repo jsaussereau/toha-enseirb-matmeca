@@ -1,3 +1,16 @@
+{{- $inner := .Inner -}}
+{{- $re := `(?s)({{[^{].*?}})` -}}
+{{- $matches := findRE $re $inner -}}
+{{- $protected := $inner -}}
+{{- range $i, $m := $matches -}}
+  {{- $marker := printf "@@SHORTCODE%d@@" $i -}}
+  {{- $protected = replace $protected $m $marker 1 -}}
+{{- end -}}
+{{- $md := $protected | markdownify -}}
+{{- range $i, $m := $matches -}}
+  {{- $marker := printf "@@SHORTCODE%d@@" $i -}}
+  {{- $md = replace $md $marker $m 1 -}}
+{{- end -}}
 <div class="shortcode-center">
-  {{- .Inner -}}
+  {{- $md | safeHTML -}}
 </div>
