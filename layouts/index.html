@@ -1,3 +1,20 @@
+{{- $portalEntry := partial "helpers/get-portal-entry.html" . -}}
+{{- if $portalEntry -}}
+  {{/* Site publié à côté d'un portail : l'accueil redirige au lieu de dupliquer sa vitrine. */}}
+<!DOCTYPE html>
+<html lang="{{ .Site.Language.Lang }}">
+  <head>
+    <meta charset="utf-8">
+    <title>{{ site.Title | default (i18n "home") }}</title>
+    <link rel="canonical" href="{{ $portalEntry }}">
+    <meta name="robots" content="noindex">
+    <meta http-equiv="refresh" content="0; url={{ $portalEntry }}">
+  </head>
+  <body>
+    <p><a href="{{ $portalEntry }}">{{ site.Title | default (i18n "home") }}</a></p>
+  </body>
+</html>
+{{- else -}}
 <!DOCTYPE html>
 <html lang="{{ .Site.Language.Lang }}">
   <head>
@@ -70,3 +87,4 @@
 
   </body>
 </html>
+{{- end -}}

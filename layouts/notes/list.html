@@ -69,6 +69,10 @@
 		{{ $hasGroupedCards = true }}
 	{{ end }}
 
+	{{/* Remonter à la racine de la section renvoie vers le portail s'il existe. */}}
+	{{ if eq (printf "%s/" (replaceRE "/+$" "" $backHref)) (printf "%s/" (replaceRE "/+$" "" $listRootHref)) }}
+		{{ $backHref = partial "helpers/get-portal-url.html" (dict "path" $sectionType "fallback" $backHref) }}
+	{{ end }}
 	<section class="sidebar-section" id="sidebar-section">
 		<div class="sidebar-holder">
 			<div class="sidebar" id="sidebar">
@@ -86,7 +90,7 @@
 							</button>
 						</div>
 						<div class="sidebar-button">
-							<button class="btn filled-button" data-href="{{ $listRootHref }}" data-filter="all" onclick="window.location.href=this.dataset.href">
+							<button class="btn filled-button" data-href="{{ partial "helpers/get-portal-url.html" (dict "path" $sectionType "fallback" $listRootHref) }}" data-filter="all" onclick="window.location.href=this.dataset.href">
 								<i class="fa-solid fa-circle-arrow-up" style="margin-right: 5px;"></i>
 								{{ $allSectionsButton }}
 							</button>

@@ -1,0 +1,14 @@
+{{/*
+Shortcode: counter
+Returns an auto-incrementing counter value for a given tag.
+Each call for the same tag on the same page increments the counter.
+Params:
+ - tag (positional 0, or named "tag"): counter name (default: "default")
+Usage:
+ {{< counter "figure" >}}   -> 1, then 2, then 3 ...
+ {{< counter tag="table" >}} -> independent counter
+*/}}
+{{- $tag := .Get 0 | default (.Get "tag") | default "default" -}}
+{{- $key := printf "counter-%s" $tag -}}
+{{- .Page.Store.Add $key 1 -}}
+{{- .Page.Store.Get $key -}}

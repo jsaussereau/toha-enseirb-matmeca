@@ -75,6 +75,11 @@ sitemap:
 
 # Site parameters
 params:
+  # URL of the portal that gathers all courses. When set, the navbar, the footer
+  # and the "all courses" sidebar button link to the portal instead of this site.
+  # Can also be set with the HUGO_PARAMS_PORTALURL environment variable.
+  #portalURL: https://cours.pages.bordeaux-inp.fr/
+
   # Background image of the landing page
   background: /images/site/background.jpg
   # Background image of the landing page for dark theme

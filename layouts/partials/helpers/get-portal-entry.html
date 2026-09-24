@@ -1,0 +1,20 @@
+{{- /*
+  Sur un site publié à côté d'un portail (params.portalURL), la page d'accueil du
+  thème ferait double emploi avec celle du portail. Ce helper renvoie l'adresse
+  vers laquelle rediriger :
+    - la page du cours lui-même s'il n'y en a qu'un dans le dépôt ;
+    - le portail sinon (plusieurs cours, ou aucun).
+  Renvoie une chaîne vide si portalURL n'est pas défini.
+*/ -}}
+{{- $target := "" -}}
+{{- with site.Params.portalURL -}}
+  {{- $target = partial "helpers/get-portal-url.html" (dict "path" "") -}}
+  {{- $entries := slice -}}
+  {{- range site.Sections -}}
+    {{- $entries = $entries | append .Sections -}}
+  {{- end -}}
+  {{- if eq (len $entries) 1 -}}
+    {{- $target = (index $entries 0).RelPermalink -}}
+  {{- end -}}
+{{- end -}}
+{{- return $target -}}

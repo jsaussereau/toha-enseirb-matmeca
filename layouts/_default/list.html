@@ -36,12 +36,19 @@
   {{ if and $isPostLikeList $rootSection }}
     {{ $listRootHref = $rootSection.RelPermalink }}
   {{ end }}
-  {{ $sectionNavItems := slice }}
-  {{ if and $isPostLikeList $rootSection }}
-    {{ $sectionNavItems = partial "helpers/get-section-nav-items.html" $rootSection }}
-  {{ end }}
   {{ $normalizedPostsRootHref := printf "%s/" (replaceRE "/+$" "" $listRootHref) }}
   {{ $normalizedCurrentHref := printf "%s/" (replaceRE "/+$" "" .RelPermalink) }}
+  {{ $showCurrentSectionOnly := and $isPostLikeList $navbarCurrentSectionOnly (ne $normalizedCurrentHref $normalizedPostsRootHref) }}
+  {{ $sidebarSection := $rootSection }}
+  {{ if and $showCurrentSectionOnly .IsSection }}
+    {{ $sidebarSection = . }}
+  {{ else if and $showCurrentSectionOnly .CurrentSection }}
+    {{ $sidebarSection = .CurrentSection }}
+  {{ end }}
+  {{ $sectionNavItems := slice }}
+  {{ if and $isPostLikeList $sidebarSection }}
+    {{ $sectionNavItems = partial "helpers/get-section-nav-items.html" $sidebarSection }}
+  {{ end }}
   {{ $backHref := site.BaseURL | relLangURL }}
   {{ $showSidebarButtons := and $isPostLikeList $navbarCurrentSectionOnly (ne $normalizedCurrentHref $normalizedPostsRootHref) }}
   {{ if ne $normalizedCurrentHref $normalizedPostsRootHref }}
@@ -69,6 +76,10 @@
     {{ $hasGroupedCards = true }}
   {{ end }}
 
+  {{/* Remonter à la racine de la section renvoie vers le portail s'il existe. */}}
+  {{ if eq (printf "%s/" (replaceRE "/+$" "" $backHref)) (printf "%s/" (replaceRE "/+$" "" $listRootHref)) }}
+    {{ $backHref = partial "helpers/get-portal-url.html" (dict "path" $sectionType "fallback" $backHref) }}
+  {{ end }}
   <section class="sidebar-section" id="sidebar-section">
     <div class="sidebar-holder">
       <div class="sidebar" id="sidebar">
@@ -86,7 +97,7 @@
               </button>
             </div>
             <div class="sidebar-button">
-              <button class="btn filled-button" data-href="{{ $listRootHref }}" data-filter="all" onclick="window.location.href=this.dataset.href">
+              <button class="btn filled-button" data-href="{{ partial "helpers/get-portal-url.html" (dict "path" $sectionType "fallback" $listRootHref) }}" data-filter="all" onclick="window.location.href=this.dataset.href">
                 <i class="fa-solid fa-circle-arrow-up" style="margin-right: 5px;"></i>
                 {{ $allSectionsButton }}
               </button>
@@ -110,8 +121,12 @@
 
         <div class="sidebar-tree">
           <ul class="tree" id="tree">
-            {{ $listHeadingText := $contentFeature.title | default $defaultListHeadingText }}
-            <li id="list-heading"><a href="{{ $listRootHref }}" data-filter="all">{{ $listHeadingText }}</a></li>
+            {{ if and $isPostLikeList $showCurrentSectionOnly $sidebarSection }}
+              <li id="list-heading"><a href="{{ $sidebarSection.RelPermalink }}">{{ $sidebarSection.Title }}</a></li>
+            {{ else }}
+              {{ $listHeadingText := $contentFeature.title | default $defaultListHeadingText }}
+              <li id="list-heading"><a href="{{ $listRootHref }}" data-filter="all">{{ $listHeadingText }}</a></li>
+            {{ end }}
             <div class="subtree">
               {{ if $isPostLikeList }}
                 {{ partial "navigators/sidebar-sections.html" (dict "items" $sectionNavItems "ctx" .) }}

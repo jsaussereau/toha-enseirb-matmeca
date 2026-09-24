@@ -1,0 +1,132 @@
+{{/*
+Shortcode: operation
+Params:
+ - a: operand a (string)
+ - b: operand b (string)
+ - op: operator label (string)
+ - r: result (string)
+ - bold: optional regex matching r whose first capture group is bolded
+         e.g. r="0b0101_0010" bold="0b0101_00(1)0" -> 0b0101_00<strong>1</strong>0
+ - align: optional alignment class (left, center, right)
+ - float: optional CSS float value (left, right)
+*/}}
+{{ $a := .Get "a" | default "" }}
+{{ $b := .Get "b" | default "" }}
+{{ $op := .Get "op" | default "" }}
+{{ $r := .Get "r" | default "" }}
+{{ $bold := .Get "bold" }}
+{{ $align := .Get "align" }}
+{{ $float := .Get "float" }}
+
+{{ $classes := slice "binary-op" }}
+{{ with $align }}{{ $classes = $classes | append . }}{{ end }}
+{{ $attrs := slice (printf "class=%q" (delimit $classes " ")) }}
+{{ with $float }}{{ $attrs = $attrs | append (printf "style=%q" (printf "float: %s; margin: 5px 10px;" .)) }}{{ end }}
+
+{{ $rendered := $r }}
+{{ if and $bold (in $bold "(") }}
+  {{ $p1 := index (split $bold "(") 0 }}
+  {{ $rest := index (split $bold "(") 1 }}
+  {{ $g := index (split $rest ")") 0 }}
+  {{ $p2 := index (split $rest ")") 1 }}
+  {{ $pattern := printf "(%s)(%s)(%s)" $p1 $g $p2 }}
+  {{ $rendered = replaceRE $pattern "$1<code class='highlight'>$2</code>$3" $r 1 }}
+{{ end }}
+
+<div {{ delimit $attrs " " | safeHTMLAttr }}>
+  <div class="binary-line">
+    <span class="label"></span>
+    <code>{{ $a }}</code>
+  </div>
+
+  <div class="binary-line">
+    <span class="label operator">{{ $op }}</span>
+    <code>{{ $b }}</code>
+  </div>
+
+  <div class="separator"></div>
+
+  <div class="binary-line result">
+    <span class="label"></span>
+    <code>
+      {{ $rendered | safeHTML }}
+    </code>
+  </div>
+</div>
+
+<style>
+.binary-op {
+  display: inline-block;
+  padding: 1rem 1.5rem;
+  margin: 1rem 0;
+  background: #bfdaff1f;
+  border: 1px solid rgba(0,0,0,.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.08);
+
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+  font-size: 1.1rem;
+}
+
+.binary-op.center,
+.binary-op.left,
+.binary-op.right {
+  display: block;
+  width: fit-content;
+}
+
+.binary-op.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.binary-op.left {
+  margin-right: auto;
+}
+
+.binary-op.right {
+  margin-left: auto;
+}
+
+.binary-line {
+  display: grid;
+  grid-template-columns: 3rem auto;
+  align-items: center;
+  line-height: 1.8;
+}
+
+.binary-line code {
+  background: transparent;
+  padding: 0;
+  font-weight: 500;
+  letter-spacing: .05em;
+}
+
+.label {
+  padding-right: .8rem;
+  color: #888;
+  font-size: .9em;
+}
+
+.operator {
+  color: #007acc;
+  font-weight: bold;
+}
+
+.separator {
+  height: 2px;
+  margin: .4rem 0;
+  background: #888;
+}
+
+.result code {
+  color: #16a34a;
+}
+
+.result code .highlight {
+  color: inherit;
+  font-size: inherit;
+  font-weight: 900;
+}
+
+</style>

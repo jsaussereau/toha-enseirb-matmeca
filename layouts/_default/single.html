@@ -48,6 +48,10 @@
   {{ else if $rootSection }}
     {{ $treeItems = partial "helpers/get-section-nav-items.html" $rootSection }}
   {{ end }}
+  {{/* Remonter à la racine de la section renvoie vers le portail s'il existe. */}}
+  {{ if eq (printf "%s/" (replaceRE "/+$" "" $backHref)) (printf "%s/" (replaceRE "/+$" "" $listRootHref)) }}
+    {{ $backHref = partial "helpers/get-portal-url.html" (dict "path" $sectionType "fallback" $backHref) }}
+  {{ end }}
   <section class="sidebar-section" id="sidebar-section">
     <div class="sidebar-holder{{ if $isPostLike }} in-post{{ end }}">
       <div class="sidebar{{ if $isPostLike }} in-post{{ end }}" id="sidebar">
@@ -65,7 +69,7 @@
               </button>
             </div>
             <div class="sidebar-button">
-              <button class="btn filled-button" data-href="{{ .Type | relLangURL }}" data-filter="all" onclick="window.location.href=this.dataset.href">
+              <button class="btn filled-button" data-href="{{ partial "helpers/get-portal-url.html" (dict "path" $sectionType "fallback" (.Type | relLangURL)) }}" data-filter="all" onclick="window.location.href=this.dataset.href">
                 <i class="fa-solid fa-circle-arrow-up" style="margin-right: 5px;"></i>
                 {{ $allSectionsButton }}
               </button>

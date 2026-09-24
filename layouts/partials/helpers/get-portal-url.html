@@ -1,0 +1,15 @@
+{{- /*
+  URL d'une page du portail qui rassemble les cours (params.portalURL), par exemple
+  "https://cours.pages.bordeaux-inp.fr/". Sans portalURL, renvoie le lien local.
+
+  Paramètres :
+    path     : chemin relatif à la langue ("", "posts", "tutorials", "notes")
+    fallback : lien local à utiliser sans portail (défaut : path | relLangURL)
+*/ -}}
+{{- $path := .path | default "" -}}
+{{- $url := .fallback | default ($path | relLangURL) -}}
+{{- with site.Params.portalURL -}}
+  {{- $url = printf "%s%s/%s" (strings.TrimSuffix "/" .) site.LanguagePrefix $path -}}
+  {{- $url = printf "%s/" (strings.TrimSuffix "/" $url) -}}
+{{- end -}}
+{{- return $url -}}
