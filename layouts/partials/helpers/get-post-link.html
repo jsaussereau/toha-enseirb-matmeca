@@ -1,4 +1,4 @@
-{{- $link := .RelPermalink | relLangURL -}}
+{{- $link := .RelPermalink -}}
 {{- with .Params.externalLink -}}
   {{- $link = . -}}
 {{- end -}}
